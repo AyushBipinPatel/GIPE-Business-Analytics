@@ -1,0 +1,73 @@
+---
+title: "Business Analytics - Course Landing Page"
+author: "Ayush Patel"
+format: html
+---
+
+# What you need before coming to class
+
+Here are necessary computational set ups that are required before staring the course. *I promise this will make your life easier.*
+
+## R and RStudio
+
+This course is being taught using R statistical programming language. **It is essential that you have R installed on your machines.** (Yes! You need to bring your laptops to class. Yes, Everyday!).  Strictly speaking, RStudio is not *necessary* for the course. However, having RStudio will make your life convenient.
+
+If you have R and RStudio installed on your laptops that is great. *Please, make sure these are fairly recent versions.*
+
+**If you do not have R and/or RStudio installed, see the following:**
+
+  + Get R from [Here](https://cran.icts.res.in/)
+  + Get RStudio from [Here](https://posit.co/download/rstudio-desktop/). Only download RStudio. No need to download R if you have it.    
+
+## Libraries
+
+There are a certain packages that we will use frequently use in class. Copy the following code, paste it in your console and execute it. This will install packages that you do not have.
+
+
+```{r}
+#| eval: false
+
+install.packages("pacman")
+
+pacman::p_load(tidyverse, rmarkdown, 
+               tinytex, ISLR, ISLR2, 
+               openintro, opendatatoronto,
+               causaldata)
+
+
+```
+
+
+## Basics of R programming
+
+It is imperative that you know the basics of R programming. That means ability to basic data wrangling tasks and basic visualizations. I recommend you go through these if you are not confident:
+
+  + [This](https://rbasics.netlify.app/index.html) is a small book. Can be completed in one or two days at an easy pace. It will start with all elementary topics. 
+  + You can also access Coursera. It is free for students at GIPE. There are several courses available to get upto seed with data wrangling and visualization.
+  
+
+# Lecture Slides
+
+You will find all lecture slides populated here.
+
+
+# References
+
+Here are various resources on R programming, and statistics and methods.
+  
+For R programming:
+
+  + [R for Data Science](https://r4ds.hadley.nz/). This book will take you through all programming techniques required to start applying data science methods. This is not a book on data science. This books helps you learn programming that this needed to do data science.
+  
+  + [Hands-on Programming with R](https://rstudio-education.github.io/hopr/). Similar motivations for using this book as the one above. This books starts at scratch.
+  + [Fundamentals of Data Visualizations](https://clauswilke.com/dataviz/). This book covers programming techniques and concepts related to data viz.
+  + [R Graphics Cookbook](https://r-graphics.org/). Everything you will ever need to learn the fundamentals and more of visualization using R.
+  + [Quarto](https://quarto.org/) website for literate programming.
+  + [RMarkdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/). The book for all details about RMarkdown.
+  
+  
+For Stats and Methods:
+
+  + [The Effect](https://theeffectbook.net/). Learning how to do causal work with observational data.
+  + [Intro to modern stats](https://openintro-ims.netlify.app/index.html). This is the book to start with if you want to learn stats from scratch.
+  + [Introduction to Statistical Learning](https://www.statlearning.com/). An excellent book for learning concepts and application of various statistical methods.
