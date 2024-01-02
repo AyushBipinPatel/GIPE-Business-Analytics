@@ -1,0 +1,491 @@
+---
+title: "Business Analytics"
+subtitle: "Data Wrangling"
+author: "Ayush Patel"
+date: today
+date-format: "DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Before we begin
+
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(dplyr)
+library(tidyverse)
+library(openintro)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About me
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Learning Objectives
+
+::: incremental
+ + Learn how to import data
+ + Learn data wrangling functions like select, arrange, mutate, filter, group by
+ + Learn how to pipe functions
+
+:::
+
+
+## First Things First - Packages
+
+::: columns
+::: {.column width="50%"}
+
+* Package is a collection of of functions
+* Install a package only once but load it for every session
+
+:::
+
+::: {.column width="50%"}
+![Source : [dplyr](https://dplyr.tidyverse.org/index.html)](https://dplyr.tidyverse.org/logo.png)
+:::
+:::
+
+## Data Wrangling - Loading the dataset{.scrollable}
+
+::: {.fragment fragment-index="1"}
+For this lecture, we will be using the `census` dataset from `openintro` package
+
+``` {r load data}
+#| eval: true
+#| echo: true
+
+census_data <- openintro::census
+```
+:::
+
+::: {.fragment fragment-index="2"}
+Taking a peek at the data
+
+``` {r data head}
+#| eval: true
+#| echo: true
+
+head(census_data)
+```
+
+:::
+
+[Alternatively, you can look at the bottom 6 rows]{.fragment fragment-index="3"}
+
+::: {.fragment fragment-index="4"}
+``` {r data tail}
+#| echo: true
+
+tail(census_data)
+```
+:::
+
+## Data Wrangling - Select
+
+[Select only year, state, family income, age, sex and personal income]{.fragment fragment-index="1"}
+
+::: {.fragment fragment-index="2"}
+``` {r select1}
+#| echo: true
+
+select(census_data, 
+       census_year, state_fips_code,
+       total_family_income, age, sex,
+       total_personal_income)
+```
+
+:::
+
+## Data Wrangling - Select {.scrollable}
+
+::: {.fragment fragment-index="1"}
+Alternatively, we could choose what we **do not** want
+
+``` {r select2}
+#| echo: true
+
+select(census_data, 
+       -race_general, -marital_status)
+```
+:::
+
+::: {.fragment fragment-index="2"}
+Also, data types can be selected
+
+``` {r select type}
+#| echo: true
+
+select(census_data, 
+       where(is.factor))
+```
+
+:::
+
+## But wait...
+
+::: {.fragment fragment-index="1"}
+* Note that the changes are not saved
+* They can be saved either to existing dataframe by overwriting it
+* Or as a new dataframe
+
+:::
+
+::: {.fragment fragment-index="2"}
+``` {r select save}
+#| echo: true
+
+census_data_selected <- select(census_data,
+                  -race_general,-marital_status)
+```
+
+:::
+
+## Data Wrangling - Arrange{.scrollable}
+
+[Arranging the data with states in the alphabetical order]{.fragment fragment-index="1"}
+
+::: {.fragment fragment-index="2"}
+``` {r arrange asec}
+#| eval: true
+#| echo: true
+
+arrange(census_data, 
+        state_fips_code)
+```
+:::
+
+[Can you guess how would you arrange in the descending order?]{.fragment fragment-index="3"}
+
+::: {.fragment fragment-index="4"}
+``` {r arrange desc}
+#| echo: true
+
+arrange(census_data, 
+        -state_fips_code)
+```
+
+:::
+
+
+## Do it Yourself - 1
+
+* Load the dataset `smoking` from the `openintro` package.
+* Select only the gender, age and smoke variables
+* Select only the numerical variables and arrange the age variable in the descending order
+* Select all variables excep the ethnicity and nationaly variables
+
+## Data Wrangling - Rename
+
+[Making the variables names more cleaner]{.fragment fragment-index="1"}
+
+::: {.fragment fragment-index="2"}
+``` {r rename}
+#| eval: true
+#| echo: true
+
+rename(census_data, 
+       state = state_fips_code)
+```
+
+:::
+
+## Data Wrangling - Mutate
+
+::: {.fragment fragment-index="1"}
+* Creating a new variable from existing ones
+* Finding total income
+
+:::
+
+::: {.fragment fragment-index="2"}
+``` {r mutate}
+#| eval: true
+#| echo: true
+
+census_data <- mutate(census_data, 
+                      total_income = total_family_income + total_personal_income)
+```
+
+:::
+
+## Do it Yourself - 2
+
+* With the `smoking` dataset, rename the highest_qualification variable as education
+* Create a new variable to calculate the total number of cigarettes in a week (adding weekends and weekdays)
+
+## Data Wrangling - Filter
+
+:::panel-tabset
+
+### More than filter
+
+Filtering ages more than 40
+
+``` {r more than filter}
+#| eval: true
+#| echo: true
+
+filter(census_data, age >= 40)
+```
+
+### Equal to filter
+
+Filtering only females
+
+``` {r equal to filter}
+#| eval: true
+#| echo: true
+
+filter(census_data, sex == "Female")
+```
+
+### AND filter
+
+Filtering cases where age is above 40 AND sex is female
+
+``` {r and filter}
+#| eval: true
+#| echo: true
+
+filter(census_data, age >= 40 & sex == "Female")
+```
+
+:::
+
+
+## Data Wrangling - Filter
+
+:::panel-tabset
+
+### OR filter
+
+Filtering cases where age is above 40 OR sex is female
+
+``` {r or filter}
+#| eval: true
+#| echo: true
+
+filter(census_data, age >= 40 | sex == "Female")
+```
+
+### Not equal to filter
+
+Filtering cases where age is NOT a female
+
+``` {r not equal to filter}
+#| eval: true
+#| echo: true
+
+filter(census_data, sex != "Female")
+```
+
+:::
+
+## Do it Yourself - 3
+
+* In the `smoking` dataset, filter males
+* From the people who do not smoke, how many are 35 years old?
+* Filter cases where the respondents is neither Divorced nor English
+* Filter only cases where age is below 20 and if the person smokes
+* How many people who report that they smoke do not have any qualifications?
+* Filter cases where the respondents is either from London or Wales
+
+## Data Wrangling - Many Functions
+
+::: {.fragment fragment-index="1"}
+* You had to select the state and age variables, rename them, arrange them and filter some states
+* This is what the code would look like
+
+:::
+
+::: {.fragment fragment-index="2"}
+```{r}
+#| eval: false
+#| echo: true
+
+census_data_selected <- select(census_data, state_fips_code, age)
+census_data_renamed <- rename(census_data_selected, state = state_fips_code)
+census_data_arranged <- arrange(census_data_renamed, state)
+census_data_filtered <- filter(census_data_arranged, age >= 40)
+
+```
+
+:::
+
+::: {.fragment fragment-index="3"}
+* Tiring, right?
+
+:::
+
+## Data Wrangling - Many Functions
+
+ [- Fortunately, there is good news]{.fragment fragment-index="1"}
+ <br>
+ [- Introducing]{.fragment fragment-index="2"} [*(drumrolls)*]{.fragment fragment-index="3"} [pipe]{.fragment fragment-index="4"}
+ <br>
+ [- The pipe operator is written as `%>%` or `|>`]{.fragment fragment-index="5"}
+ <br>
+ [- Relies on a step-wise logic]{.fragment fragment-index="6"}
+ <br>
+ [- Useful in making the code more readable]{.fragment fragment-index="7"}
+ <br>
+ [- Eliminates the possibilities of making mistakes in code writing]{.fragment fragment-index="8"}
+
+## Data Wrangling - Pipe{.scrollable}
+
+::: columns
+::: {.column width="50%"}
+**Original Code**
+
+<br>
+
+```{r}
+#| eval: false
+#| echo: true
+
+census_data_selected <- select(
+  census_data,
+  state_fips_code,age
+  )
+
+census_data_renamed <- rename(
+  census_data_selected,
+  state = state_fips_code
+  )
+
+census_data_arranged <- arrange(
+  census_data_renamed, 
+  state
+  )
+
+census_data_filtered <- filter(
+  census_data_arranged,
+  age >= 40
+  )
+```
+
+:::
+
+::: {.column width="50%"}
+**With Pipe**
+
+<br>
+
+```{r}
+#| eval: false
+#| echo: true
+
+census_data |>
+  select(state_fips_code, age) |>
+  rename(state = state_fips_code) |>
+  arrange(census_data_renamed, state) |>
+  filter(census_data_arranged, age >= 40)
+```
+
+:::
+:::
+
+## Data Wrangling - Group by and Summarise {.scrollable}
+
+
+[Finding the total personal income by sex]{.fragment fragment-index="1"}
+
+::: {.fragment fragment-index="2"}
+```{r}
+#| eval: true
+#| echo: true
+
+census_data |>
+  group_by(sex) |>
+  summarise(total_income_sex = sum(total_personal_income, na.rm =T)
+            )
+```
+
+:::
+
+[Can you similarly calculate the total personal income by state?]{.fragment fragment-index="3"}
+
+::: {.fragment fragment-index="4"}
+```{r}
+#| eval: false
+#| echo: true
+
+census_data |>
+  group_by(state_fips_code) |>
+  summarise(total_income_state = sum(total_personal_income, na.rm = T)
+            )
+```
+
+:::
+
+## Do it Yourself - 4
+
+* In the `smoking` dataset, select only the highest_qualification and smoke_weekdays variables, rename the variables appropriately and calculate the total number of cigarettes smoke by people in each qualification
+* Find the number of people who smoke below the age of thirty and arrange the results in decreasing order of age
+* Select the income and smoke_weekend variables and calculate the total number of cigarettes smoke in each income category
+* What is the mean age of males and females?
+
+## Data Wrangling - `case_when` {.scrollable}
+
+[`case_when()` is used to create a new variable using conditional logic]{.fragment fragment-index="1"}
+
+[We want to convert income into income categories]{.fragment fragment-index="2"}
+
+::: {.fragment fragment-index="3"}
+```{r case when}
+#| eval: true
+#| echo: true
+
+census_data |>
+  mutate(
+    income_category = case_when(
+      total_family_income >= 0 &
+        total_family_income < 40000 ~ "Low Income",
+      total_family_income >= 40000 &
+        total_family_income < 100000 ~ "Middle Income",
+      total_family_income >= 100000 ~ "High Income")
+    )
+```
+
+:::
+
+## Do it Yourself - 5
+
+* Create age categories for the `smoking` dataset like 15-25, 26-40, 40-59 and 59+
+* Convert the gender variable into a numeric one, with female as 1 and male as 0
+* Create smoking categories as 'High' (for more than 30), 'Medium'(11-30) and 'Low' (0-10) with the smoke_weekends variable
+
+## Thank you :) {.center}

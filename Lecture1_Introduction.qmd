@@ -1,0 +1,196 @@
+---
+title: "Business Analytics"
+subtitle: "Introduction and Resources"
+author: "Ayush Patel"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Before we begin
+
+[Please refer to the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/) for accessing all lecture slides and other resources related to the course.]{.fragment fragment-index="1" style="font-size:40px"}
+
+[Make sure that you have the following packages installed in R.]{.fragment fragment-index="2" style="font-size:40px"}
+
+::: {.fragment fragment-index="3"}
+```{r}
+#| eval: false
+#| echo: true
+install.packages("pacman")
+
+pacman::p_load(tidyverse, rmarkdown, 
+               tinytex, ISLR, ISLR2, 
+               openintro, opendatatoronto,
+               causaldata)
+```
+:::
+
+## About me
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## About the course
+
+::: {style="font-size:30px"}
+::: incremental
+### What this course will cover
+
+-   How to do exploratory and descriptive data analysis
+-   Effective data visualization
+-   Literate Programming
+-   Learning to work with important datasets and prepare reports
+
+### What this course will NOT cover
+
+-   All statistical techniques that exists
+-   All the mathematics behind a statistical technique
+-   Computer science
+:::
+:::
+
+## RStudio projects - Why?
+
+#### [Content for this topic has been sourced from [Danielle Navarro's workshop](https://djnavarro.net/chdss2018/day2/projects.html). Please check out her [work](https://djnavarro.net/chdss2018/) for detailed information.]{style="font-size:15px"}
+
+::: {.fragment fragment-index="1" style="font-size:30px"}
+The core idea behind RStudio Projects, in their own words, is that
+
+> RStudio projects make it straightforward to divide your work into multiple contexts, each with their own working directory, workspace, history, and source documents.
+:::
+
+::: {.fragment fragment-index="2" style="font-size:30px"}
+::: incremental
+-   **Why should I use RStudio projects?**
+    -   **Convenience**
+        -   Keeps things tidy
+        -   Smooths the process
+    -   **Functionality**
+        -   RStudio projects have a `.Rproj` file, this serves as an anchor for other packages
+        -   Also useful for sharing code with other people
+:::
+:::
+
+## RStudio projects - How? {.scrollable}
+
+#### [Content for this topic has been sourced from [Danielle Navarro's workshop](https://djnavarro.net/chdss2018/day2/projects.html). Please check out her [work](https://djnavarro.net/chdss2018/) for detailed information.]{style="font-size:15px"}
+
+::: panel-tabset
+### 1. Select new Project
+
+[Go to the the little blue menu in the top the top right corner in RStudio, click on the dropdown menu, and select "New Project".]{style="font-size:25px"}
+
+```{=html}
+<iframe src="https://djnavarro.net/chdss2018/day2/images/new_rstudio_project1.jpg" scrolling= "yes" width = 1600 height = 300></iframe>
+```
+### 2. Select Directory
+
+[This will bring up a dialog box that provides a few different options. If you are going to work in a new folder, choose 'New Directory'. If you want to work in an existing folder, select 'Existing Directory' and browse for the location.]{style="font-size:25px"}
+
+```{=html}
+<iframe src="https://djnavarro.net/chdss2018/day2/images/new_rstudio_project2.jpg" scrolling= "yes" width = 1600 height = 300></iframe>
+```
+
+:::
+
+## RStudio Projects - How? 
+
+::: panel-tabset
+
+### 3. There, you have your project
+
+[Once you've created the project, if you have a look at the folder in Windows Explorer / Mac Finder, you'll see your file!]{style="font-size:25px"}
+
+```{=html}
+<iframe src="https://djnavarro.net/chdss2018/day2/images/new_rstudio_project4.jpg" scrolling= "yes" width = 1600 height = 400></iframe>
+```
+:::
+
+## Data Wrangling - What and Why
+
+#### What is data wrangling?
+
+::: {style="font-size:30px"}
+::: incremental
+-   It is not often that you get the data you want to work with in a specific format. You will always want to add, delete, filter or transform variables.
+-   Also, when you start exploring your data, you would want to create summaries of variables.
+-   This transformation or manipulation of data is called data wrangling.
+
+#### Why should I learn it?
+
+-   Because you will almost never get data that is already in the format that you want to work in.
+-   Through this course, you will learn data wrangling techniques in R using the `dplyr` and `tidyverse` packages.
+:::
+:::
+
+## Data Visualization
+
+#### What is data visualization?
+
+::: {style="font-size:30px"}
+::: incremental
+-   Graphical representation of data
+-   Converting large amounts of data into easily comprehensible visuals
+
+#### Why should I learn it?
+
+-   To present data in an appealing manner
+-   To understand patterns from data
+-   Through this course, you will learn data visualization techniques in R using the `ggplot2` package.
+:::
+:::
+
+## Literate Programming
+
+#### [Content for this topic has been sourced from [Stephanie Hicks's lecture](https://www.stephaniehicks.com/jhustatcomputing2022/posts/2022-09-01-literate-programming/#introduction). Please check out her work for detailed information.]{style="font-size:15px"}
+
+#### What is Literate Programming?
+
+::: {style="font-size:30px"}
+::: incremental
+-   Make writing reproducible reports easier is known as literate statistical programming
+-   Think of a report or a publication as a stream of text and code
+    -   The text is readable by people and the code is readable by computers
+    -   The analysis is described in code chunks
+    -   Each text chunk will relay something in a human readable language
+
+#### Why should I learn it?
+
+-   Because the aim is not just to learn to write code, but to write it in a way that it is readable and reproducible
+-   Through this course, you will learn literate programming skills in R with `R Markdown`
+:::
+:::
+
+## Exercise
+
+-   By next week, set up your own Github account and website
+-   You can use the help of this [resource](https://stat545.com/version-control.html)
+-   ALSOO, **fully completing this gives you 3 marks as extra credit** :)
+
+## Thank you :) {.center}
