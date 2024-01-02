@@ -50,6 +50,8 @@ It is imperative that you know the basics of R programming. That means ability t
 
 You will find all lecture slides populated here.
 
+  + [Lecture 1: Intro and Resources](/lecture1.html)
+
 
 # References
 
