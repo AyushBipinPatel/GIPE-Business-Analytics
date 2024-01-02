@@ -43,6 +43,7 @@ pacman::p_load(tidyverse, rmarkdown,
 It is imperative that you know the basics of R programming. That means ability to basic data wrangling tasks and basic visualizations. I recommend you go through these if you are not confident:
 
   + [This](https://rbasics.netlify.app/index.html) is a small book. Can be completed in one or two days at an easy pace. It will start with all elementary topics. 
+  + Read and practice chapters on data transformation and visualization from [R for data science](https://r4ds.hadley.nz). Chapters 3,9 and 10.
   + You can also access Coursera. It is free for students at GIPE. There are several courses available to get upto seed with data wrangling and visualization.
   
 
