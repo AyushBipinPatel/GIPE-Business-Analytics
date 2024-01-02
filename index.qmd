@@ -51,8 +51,8 @@ It is imperative that you know the basics of R programming. That means ability t
 
 You will find all lecture slides populated here.
 
-  + [Lecture 1: Intro and Resources](lecture1_Introduction.html)
-  + [Lecture 2: Data Wrangling Basics](lecture2_DataWrangling.html)
+  + [Lecture 1: Intro and Resources](Lecture1_Introduction.html)
+  + [Lecture 2: Data Wrangling Basics](Lecture2_DataWrangling.html)
 
 
 # References
