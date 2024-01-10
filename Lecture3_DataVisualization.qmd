@@ -1,0 +1,580 @@
+---
+title: "Business Analytics"
+subtitle: "Data Visualization"
+author: "Ayush Patel"
+date: today
+date-format: "DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite
+::: incremental
+
+You already...
+
++ Know basics of data wrangling
++ Understand different data types
++ Understand different types of objects
+
+:::
+
+## Before we begin
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(tidyverse)
+library(ggplot2) ## is this command really needed?
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About Me
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## The ggplot2 Package
+
+#### [Content for this topic has been sourced from [Winston Chang's 'R Graphics Cookbook, 2nd edition'](https://r-graphics.org/chapter-ggplot2). Please check out his [work](https://r-graphics.org/) for detailed information.]{style="font-size:15px"}
+
+::: columns
+::: {.column width="70%"}
+::: incremental
++ `ggplot2` takes a different approach to graphics than other plotting packages in R
++ Gets its name from Leland Wilkinson’s grammar of graphics
++ Grammar of graphics - provides a formal, structured perspective on how to describe data graphics
+
+:::
+:::
+
+::: {.column width="30%"}
+![Source : [ggplot2 logo from RStudio hexstickers repo](https://raw.githubusercontent.com/rstudio/hex-stickers/master/thumbs/ggplot2.png)](https://raw.githubusercontent.com/rstudio/hex-stickers/master/thumbs/ggplot2.png)
+:::
+:::
+
+## ggplot2 Terminology
+#### [Content for this topic has been sourced from [Winston Chang's 'R Graphics Cookbook, 2nd edition'](https://r-graphics.org/chapter-ggplot2). Please check out his [work](https://r-graphics.org/) for detailed information.]{style="font-size:15px"}
+
+::: incremental
+Some of the terminologies used in ggplot2:
+
++ `data`- what we want to visualize and consists of variables
++  `Geoms` - geometric objects that are drawn to represent the data, such as bars, lines, and points
++  `aesthetics` - visual properties of geoms, such as x and y position, line color, point shapes, etc
++  There are `mappings` from data values to aesthetics
+:::
+
+## Building a plot
+
+> Effective design should start with a visual task analysis, determine the set of visual queries to be supported by a design, and then use color, form, and space to efficiently serve those queries. - Colin Ware
+
+We will use `mpg` and `diamonds` dataset for learning data visualization
+You can run `?mpg` and `?diamonds`to understand the variables of the data
+
+## Components of a plot - `ggplot()`
+
+An example - Plotting City Miles by Fuel Type
+
+```{r comp1}
+#| output-location: column
+#| echo: true
+
+ggplot(data = mpg)  # the plot area and data
+  
+```
+
+## Components of a plot - `geom()` & `aes()`
+
+```{r comp2}
+#| echo: true
+#| output-location: column
+#| code-line-numbers: "2|3|4"
+
+ggplot(data = mpg) + # the plot area and data
+geom_boxplot(
+    aes(fl, cty),
+    fill = "steelblue",
+    alpha = 0.5
+    )  # geom and aesthetic
+
+```
+
+## Components of a plot - layers
+
+```{r comp3}
+#| echo: true
+#| output-location: column
+#| code-line-numbers: "7|8|9|10|11"
+
+ggplot(data = mpg) + # the plot area and data
+geom_boxplot(
+    aes(fl, cty),
+    alpha = 0.5,
+    fill = "steelblue"
+    )+  # geom and aesthetic
+  geom_jitter(
+    aes(fl, cty),
+    alpha = 0.5,
+    colour = "steelblue"
+    )  # another layer with aesthetics
+  
+```
+
+
+## Components of plot - `theme()`
+
+```{r comp4}
+#| echo: true
+#| output-location: column
+#| code-line-numbers: "12"
+
+
+ggplot(data = mpg) + # the plot area and data
+  geom_boxplot(
+    aes(fl, cty),
+    alpha = 0.5,
+    fill = "steelblue"
+    )+  # geom and aesthetic
+  geom_jitter(
+    aes(fl, cty),
+    alpha = 0.5,
+    colour = "steelblue"
+    )+  # another layer with aesthetics
+  theme_bw()  # theme
+
+```
+
+## Components of a plot - `labs()`
+
+```{r}
+#| echo: true
+#| output-location: column
+#| code-line-numbers: "13|14|15|16|17"
+
+ggplot(data = mpg) + # the plot area and data
+  geom_boxplot(
+    aes(fl, cty),
+    alpha = 0.5,
+    fill = "steelblue"
+    )+  # geom and aesthetic
+  geom_jitter(
+    aes(fl, cty),
+    alpha = 0.5,
+    colour = "steelblue"
+    )+  # another layer with aesthetics
+  theme_bw()+  # theme
+  labs(
+    x = "Fuel Type",
+    y = "City Miles (per gallon)",
+    title = "City Miles (per gallon) of Cars by Fuel Type"
+  ) # labels
+
+```
+
+
+## Plotting a continuous variable
+
+::: columns
+::: {.column width="50%"}
+
+* Histogram of displacement
+* Useful for seeing distribution of a variable
+``` {r 1continuous1}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+ #specifying data
+  geom_histogram(
+     aes(x = displ)
+     ) #geom and aesthetic
+```
+
+:::
+
+::: {.column width="50%"}
+
+
+* Density Plot of Displacement
+* A more smooth version of the histogram
+
+``` {r 1continuous2}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+ #specifying data
+  geom_density(
+    aes(x = displ)
+    ) #geom and aesthetic
+```
+
+:::
+:::
+
+## Do it Yourself - 1
+
++ Load the `yrbss_samp` dataset from `openintro` package
++ Make a histogram for the height variable
++ Make a density plot to see the distribution of the weight variable
++ What can you infer from the density plot of age?
+
+## Potting a discrete variable
+
+* Useful for calculating frequency of discrete variables
+* Plotting the type of drive train
+
+``` {r 1discrete}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+
+  geom_bar(
+    aes(x = drv)
+    )
+```
+
+## Do it Yourself - 2
+
++ Using the `yrbss_samp` data, plot a bar chart to see the distribution of males and females
++ Similarly, what is the distribution of Hispanic and people who are not Hispanic in the sample? Show using a data visualization
+
+## Plotting two continuous variables
+
+* Scatterplot - useful for seeing the relationship of one plot with another
+* Potting displacement by city miles
+
+``` {r 2continuous}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+
+  geom_point(
+    aes(x = displ,y = cty)
+    ) #adding  a layer of points
+```
+
+## Plotting one continuous and one discrete variable
+
+Plotting mean displacement by type of the car
+
+``` {r discretecontinuous}
+#| eval: true
+#| echo: true
+mpg %>%
+  group_by(class) %>%
+  summarise(
+    mean_displacement = mean(displ)
+    ) %>% # data wrangling
+  ggplot() +
+  geom_col(
+    aes(class, mean_displacement)
+    ) #adding a column
+```
+
+## Do it Yourself - 3
+
++ Plot a scatterplot of height and weight
++ Make a bar chart to show the difference between the mean height between male and female respondents
++ Depict visually what is the difference between the mean days that males and females do strength training
++ Filter the data for only males, and then make a bar chart to see whether there is a difference between the average height between people who are Hispanic as opposed to those who are not
+
+
+## A graphing template
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science'](https://r4ds.had.co.nz/data-visualisation.html). Please check out his [work](https://r4ds.had.co.nz/index.html) for detailed information.]{style="font-size:15px"}
+
+* Now that you have looked at some graphs, a graphing template can be
+
+``` {r graph_template}
+#| eval: false
+#| echo: true
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+
+## Aesthetics 
+
+* Often, you do not just work with two variables
+* There are additional variables that you want to see along with the variables on the two axes
+* Aesthetics are used to show visually an additional parameter
+
+## Aesthetics - Colour
+
+``` {r colour_aesthetic}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+
+  geom_point(
+    aes(x = displ,y = cty, 
+        colour = drv)
+    ) # shows the different type of drive train through colours
+```
+
+## Aesthetics - Shape
+
+``` {r shape_aesthetic}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+
+  geom_point(
+    aes(x = displ,y = cty, 
+        shape = drv)
+    ) # shows the different type of drive train through shapes
+```
+
+## Aesthetics - Alpha
+
+``` {r alpha_aesthetic}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+
+  geom_point(
+    aes(x = displ,y = cty, 
+        shape = drv), 
+    alpha = 0.5) #sets the opacity
+```
+
+## Aesthetics - Size
+
+``` {r size_aesthetic}
+#| eval: true
+#| echo: true
+ggplot(data = mpg)+
+  geom_point(
+    aes(x = displ,y = cty, 
+        size = drv), 
+    alpha = 0.5)
+```
+
+## Do it Yourself - 4 
+
++ To the scatterplot of height and weight made earlier, add gender as the colour aesthetic
++ To the previous plot, instead of gender as the colour, add gender as the shape aesthetic
++ To the second plot, add alpha as first as 0.2, then as 0.5 and then 0.8. What is the difference?  
++ Replace size as the aesthetic to the first plot
+
+## Facet Wrap
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science'](https://r4ds.had.co.nz/data-visualisation.html). Please check out his [work](https://r4ds.had.co.nz/index.html) for detailed information.]{style="font-size:15px"}
+
+* Faceting is a way to create smaller categories
+* A way to see categories individually
+* `facet_wrap()` only uses a discrete variable
+
+``` {r, facet_grid}
+ggplot(data = mpg) + 	
+  geom_point(
+    aes(x = displ, y = hwy)
+    ) +
+	facet_wrap(~ class, 
+	           nrow = 2) # the '~' creates the formula for facet
+```
+
+## Cleaning the plot
+
+:::panel-tabset
+
+### [Reordering]{style="font-size:25px"}
+``` {r reordering}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+mpg %>%
+  group_by(class) %>%
+  summarise(mean_displacement = mean(displ)) %>%
+  ggplot(
+    aes(x = reorder(class, mean_displacement), 
+        y = mean_displacement)
+    ) +
+  geom_col()
+```
+
+### [coord_flip]{style="font-size:25px"}
+
+``` {r reordering_flip}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+mpg %>%
+  group_by(class) %>%
+  summarise(mean_displacement = mean(displ)) %>%
+  ggplot(aes(x = reorder(class, mean_displacement), y = mean_displacement)) +
+  geom_col()+
+  coord_flip() #flips the axes
+```
+
+### [Bar Width and Fill]{style="font-size:25px"}
+
+``` {r width}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+mpg %>%
+  group_by(class) %>%
+  summarise(mean_displacement = mean(displ)) %>%
+  ggplot(aes(x = reorder(class, mean_displacement), y = mean_displacement)) +
+  geom_col(width = .65, fill = "#118B60") +
+  coord_flip()
+```
+
+### [Labels]{style="font-size:25px"}
+
+``` {r labels}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+mpg %>%
+  group_by(class) %>%
+  summarise(mean_displacement = mean(displ)) %>%
+  ggplot(aes(x = reorder(class, mean_displacement), y = mean_displacement)) +
+  geom_col(width = .65, , fill = "#118B60")+
+  coord_flip()+
+  labs(title = "2 Seater Has the Highest Displacement",
+       subtitle = "Mean Displacement (in litres) vs Class of the Model",
+       y = "Mean Displacement",
+       x = "Type of the car",
+       caption = "Data Source : mpg | Analysis by Student")+
+  theme_bw()
+```
+
+:::
+
+## Do it Yourself - 5
+
++ Convert the `strength_training_variable` into categories, with values between 0 as 'no training', 1-3 as 'low training', 3-5 as 'moderate training' and more than 5 as 'high training'
++ Make a bar plot of the mean weight of people in these categories
++ Reorder the bars in descending order and reduce their width
++ Now, flip the axis of the previous plot
++ Format the graph properly, with proper labels, captions, data source and colours
+
+## Bar Charts
+
+::: panel-tabset
+
+### Grouped Bar Chart
+
+``` {r grouped}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+mpg %>%
+  group_by(fl, drv) %>%
+  summarise(mean_displacement = mean(displ)) %>%
+  ggplot(aes(x = fl, y = mean_displacement, fill = drv)) +
+  geom_bar(position="dodge", stat="identity")+ 
+  scale_fill_brewer(palette = "Pastel1")+
+  theme_bw()
+```
+
+### Stacked Bar Chart
+
+``` {r stacked}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+mpg %>%
+  group_by(fl, drv) %>%
+  summarise(mean_displacement = mean(displ)) %>%
+  ggplot(aes(x = fl, y = mean_displacement, fill = drv)) +
+  geom_bar(position="stack", stat="identity")+
+  scale_fill_brewer(palette = "Pastel1")+
+  theme_bw()
+```
+:::
+
+## Bar Graph with Counts
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science'](https://r4ds.had.co.nz/data-visualisation.html). Please check out his [work](https://r4ds.had.co.nz/index.html) for detailed information.]{style="font-size:15px"}
+
+By default, R takes count as y variable
+``` {r count_graph}
+#| eval: true
+#| echo: true
+#| code-fold: true
+#| fig-height: 4
+#| fig-width: 5
+ggplot(data = diamonds) + 
+  stat_count(mapping = aes(x = cut)) #to count and plot
+```
+
+## Line Chart
+
+Useful for showing trend over time
+Using data `tourism` and drawing a line chart for unemployment over the years 
+
+``` {r line}
+#| eval: true
+#| echo: true
+#| code-fold: true
+tourism <- openintro::tourism
+tourism %>%
+  ggplot(aes(x= year, y = visitor_count_tho)) +
+  geom_line(group = 1, color = '#E54B4B', lwd = 1) +
+  geom_point() +
+  ggtitle("Increase in Number of Tourists in Turkey") +
+  xlab("Year")+
+  ylab("Number of Visitors") +
+  theme_bw()
+```
+
+## Area Chart
+
+A modification to the line chart
+``` {r area}
+#| eval: true
+#| echo: true
+#| code-fold: true
+tourism <- openintro::tourism
+tourism %>%
+  ggplot(aes(x= year, y = visitor_count_tho)) +
+  geom_area( fill="#69b3a2", alpha=0.4) + #to get the area below the graph
+  geom_line(group = 1, color = '#E54B4B', lwd = 1) +
+  ggtitle("Increase in Number of Tourists in Turkey") +
+  xlab("Year")+
+  ylab("Number of Visitors") +
+  theme_bw()
+```
+
+## Do it Yourself - 6
+
++ To the previous plot of training and weight that you made, convert it into a grouped barchart with the groups as the `gender` variable
++ Alternatively, make it a stacked bar chart
++ Use the `unempl` dataset and make a line chart of rate of unemployment over the years. Make sure that you properly format the graph as required
++ Convert the previous line graph into an area chart
+
+## Thank you :) {.center}
