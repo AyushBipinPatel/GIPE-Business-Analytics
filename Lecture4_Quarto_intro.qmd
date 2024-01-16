@@ -1,0 +1,187 @@
+---
+title: "Business Analytics"
+subtitle: "Quarto - Literate Programming"
+author: "Ayush Patel"
+date: today
+date-format: "DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite
+::: incremental
+
+You should have
+
+  + RStudio installed
+  + Quarto installed
+  + tinytex installed
+  + rmarkdown installed
+
+:::
+
+## About Me
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Quarto - Literate Programming
+
+>"A data science authoring framework"
+
+![](https://media.giphy.com/media/elUGwgiPOdq7e/giphy.gif)
+
+**Bind code, its output and your words in one document.**
+
+## Quarto{.center}
+
+:::incremental
+
+  + .qmd files
+  + can be *rendered* to various formats  - pdf, word, html, presentations etc.
+  + can run multiple languages - R, Python, Julia etc
+
+:::
+
+## Essential elements of a Quarto doc{.center}
+
+:::incremental
+
+  + The YAML header - stuff between `---` at the begining of the doc
+  + Code chunks - code written between ```` ``` ````
+  + Your words and explanations in text and simple markdown formatting `*Italic*` `**Bold**`
+
+:::
+
+## Quarto Components - The YAML
+
+**Yet Another Markup Language**
+
+```
+
+---
+title: "Mirza Nosha and Economics"
+subtitle: "What iffs"
+author: "Ayush"
+date: "Jan 16, 2024"
+format: html
+---
+
+```
+
+  + Controls the meta settings
+  + It is optional
+  + Comes with predefined defaults
+  + See other options [here](https://quarto.org/docs/reference/formats/opml.html)
+
+
+## Quarto Components - Code Chunks
+
+```{r}
+#| echo: fenced
+#| eval: false
+#| label: chunk1
+#| fig-width: 6
+
+2+2
+```
+
+  + This is where you write your code
+  + There can be multiple code chunks
+  + the stuff that follows after `#|` is chunk option. [See](https://quarto.org/docs/computations/execution-options.html) to learn more.
+  + see `Tools>Keybord shortcuts help` to find shortcut to create a code chunk.
+  
+## Quarto Components - text & formatting
+
+::::{.columns}
+
+:::{.column}
+
+`# heading`
+
+`*Italics*`
+
+`$$Y = \alpha + \beta x + \epsilon$$`
+:::
+
+:::{.column}
+### Heading
+
+*Italics*
+
+$$Y = \alpha + \beta x + \epsilon$$
+:::
+
+::::
+
+[See](https://quarto.org/docs/authoring/markdown-basics.html) for more on markdown reference
+
+## What can go wrong? - Render a qmd
+
+:::incremental
+
+  + File> New File> Quarto Document
+  + Add title, author name and select output type
+  + Click `Create`
+  + This is a `.qmd`file
+  + Find the blue `Render` button, Press it.
+  + **Are you able to see an output file?**
+
+:::
+
+## You just rendered your first Quarto file{.center}
+
+![](https://media.giphy.com/media/Gyb7Mrx7jlGF2/giphy.gif)
+
+## Quarto Documentation {.center}
+
+>**No one can remember everything. Refer to documentation. Do yourself a favour.**
+
+  + [Quarto Website](https://quarto.org/) - Refer to the guide - *Keep it handy*
+  + [Quarto tip a day](https://mine-cetinkaya-rundel.github.io/quarto-tip-a-day/) - a collection of resources to answer recurring `How to` questions.
+
+## A small demo{.center}
+
+
+## Exercise
+
+  + Create a Quarto document set for html output
+  + Provide appropriate title
+  + Add you name to author
+  + Refer to [Diwali Sales Data](https://github.com/rfordatascience/tidytuesday/blob/master/data/2023/2023-11-14/readme.md) code book
+  + Use this command to read in the data:
+```{r}
+#| eval: false
+#| echo: true
+
+data_diwali <- read.csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-11-14/diwali_sales_data.csv")
+
+```
+  
+  **Carry out Exploratory and Descriptive Analyses. Write about your observations.**
+  
+## Thank you.
