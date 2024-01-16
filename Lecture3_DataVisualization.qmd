@@ -577,4 +577,47 @@ tourism %>%
 + Use the `unempl` dataset and make a line chart of rate of unemployment over the years. Make sure that you properly format the graph as required
 + Convert the previous line graph into an area chart
 
+## Examples
+
+:::panel-tabset
+
+### Data
+```{r showdata}
+#| echo: false
+#| column: page
+
+tibble(
+  Country = c("Afghanistan","Bangladesh",
+              "Bhutan", "India", "Maldives",
+              "Nepal", "Pakistan"),
+  perc_sch_age_ch_not_attn = c(37.7,11.4,10.1,
+                               7.4,1.0,5.0,26.3),
+  num_sch_age_ch_not_attn =c(3455991,3922776,16537,
+                             17431407,751,319730,11592612),
+  perc_pop_liv_ch_not_attn_sch = c(48.7,11.2,10.8,6.4,1.3,
+                                   5.5,28.5),
+  perc_ch_04_maln = c(NA,39.7,33.5,44.2,
+                      18.6,37.9,39.1),
+  num_ch_04_maln = c(NA,6540001,25792,51508525,
+                     8239,1143351,10480891)
+)|>
+  gt::gt()
+
+
+```
+
+### Plot1
+
+:::{.column-body}
+<img src="result_a_chart_perc_pop_living_with_ch_not_sch_attn.png" width="100%" height="500"/>
+:::
+
+### Plot2
+
+:::{.column-body}
+<img src="result_a_chart_child_nutrition.png" width="100%" height="500"/>
+:::
+
+:::
+
 ## Thank you :) {.center}
