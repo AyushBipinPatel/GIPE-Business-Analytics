@@ -1,0 +1,387 @@
+---
+title: "Business Analytics"
+subtitle: "Linear Regression"
+author: "Ayush Patel"
+date: today
+date-format: "DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite
+::: incremental
+
+You already...
+
++ Know basics of data wrangling in R
++ Know basics of data visualization in R
++ Have a knowledge of basic statistics
+
+:::
+
+## Before we begin
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(tidyverse)
+library(MASS)
+library(openintro)
+library(palmerpenguins)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About Me
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Central Tendency - Refresher{.scrollable}
+
+#### [Content for this topic has been sourced from [Danielle Navarro's 'Learning statistics with R'](https://learningstatisticswithr.com/lsr-0.6.pdf). Please check out her work for detailed information.]{style="font-size:15px"}
+
+::: incremental
+
+  + To get a 'gist' of data, it is useful to condense data into 'summary' statistics
+  + Often, the measures of central tendency (mean, median, mode) are used 
+  + In simple words
+    - Mean - the average; adding all values and dividing by the number of observations
+    - Median - middle value of the observations
+    - Mode - the value that occurs most frequently
+
+:::
+
+## Central Tendency - Refresher{.scrollable}
+
+#### [Content for this topic has been sourced from [Danielle Navarro's 'Learning statistics with R'](https://learningstatisticswithr.com/lsr-0.6.pdf). Please check out her work for detailed information.]{style="font-size:15px"}
+
+* Ok, but what do these measures imply?
+
+![Danielle Navarro](https://files.mtstatic.com/site_4462/4570/0?Expires=1705350868&Signature=eNkyYXPkTT75gahk3r0LgNK4dwiN5gcO20rZ1qWB2dnkSD-90nDRTZs5MN-58Q0t9f-Z3cYYWFyZiSI8Ty9NUTw766xKvpcXKv8EAfnmDFcSqZyW9~0MGloQRKQR9DsKBXXZBezyu-XZdwvMj70bjVw5uEq7FzuLgc6qIIRB3bM_&Key-Pair-Id=APKAJ5Y6AV4GI7A555NA)
+
+* Mean is affected by outliers
+* Median is not affected by outliers
+* Example - Mean salary of an Indian will be higher than median Indian salary, same with house prices
+
+## Variance and Correlation - Refresher{.scrollable}
+
+#### [Content for this topic has been sourced from [Danielle Navarro's 'Learning statistics with R'](https://learningstatisticswithr.com/lsr-0.6.pdf). Please check out her work for detailed information.]{style="font-size:15px"}
+
+::: incremental
+
++ Central tendency shows at the middle and 'popular' point of the data
++ But, variance shows how spread out the values are from the averages
++ Variability, or variance, is seen by
+  - Range - Difference between largest and smallest value
+  - Interquartile Range - Difference between the 25th and 75th quartile
+  - Variance - Average squared deviation from the mean
+  
++ To see relationship ***between*** variables, we check **correlation**
+
+:::
+
+## What is Linear Regression?{.scrollable}
+#### [Content for this topic has been sourced from the book ['An Introduction to Statistical Learning with applications in R'](https://www.statlearning.com/). Please check out the book for detailed information.]{style="font-size:15px"}
+
++ A linear model can help us answer questions about association between response and predictors, predict sales in future, linearity of relation, and interaction between predictors
++ Linear regression, in simple words, is useful for predicting  a quantitative response
++ Linear Regression with one variable  - predicting a quantitative response Y on the basis of a single predictor variable X
+
+## Prediction with linear regression{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+::: {.fragment fragment-index="1"}
+* Use the `possum` dataset from the `openintro` package
+* How can we predict head length from total length?
+* Scatterplot of total length and head length
+
+:::
+
+::: {.fragment fragment-index="2"}
+```{r scatterplot_possum}
+#| eval: true
+#| echo: true
+#| output-location: column
+possum %>%
+ggplot(aes(x = total_l, y = head_l))+
+  geom_point() +
+  theme_light()
+```
+
+:::
+
+## Prediction with linear regression{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+::: {.fragment fragment-index="1"}
+* **Independent or Predictor Variable** (x) -  Total length
+* **Dependent or Response Variable** (y) - Head Length
+
+:::
+
+::: {.fragment fragment-index="2"}
+```{r scatterplot_line_possum}
+#| eval: true
+#| echo: true
+#| output-location: column
+possum %>%
+ggplot(aes(x = total_l, y = head_l))+
+  geom_point()+
+  geom_smooth(
+    method = "lm"
+    )+#lm method used to fit linear model
+  theme_light()
+```
+:::
+
+## Do it Yourself - 1 
+
+* Use the `husbands_wives` data from `openintro`
+* Make a scatterplot of the ages of husbands and wives
+* To the previous scatterplot, fit the trendline
+* What is the relationship between the two variables like?
+* Repeat points 2-5, but for heights of husbands and wives
+
+## Prediction with linear regression - Linear Regression Equation{.scrollable}
+
+```{r possum_equation}
+#| eval: true
+#| echo: true
+lm(head_l ~ total_l, data = possum)
+```
+
+* The equation can be written as $$\hat{y} = 42.71 + 0.57x$$
+* We will learn the intuition behind this model soon
+
+## Residual
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* Leftover variation that the model does not account for
+* **Data = Fit + Residual** 
+
+![Source : [Introduction to Modern Statistics](https://openintro-ims.netlify.app/07-model-slr_files/figure-html/scattHeadLTotalLLine-highlighted-1.png)](https://openintro-ims.netlify.app/07-model-slr_files/figure-html/scattHeadLTotalLLine-highlighted-1.png)
+
+
+## Writing a Linear Regression Equation{.scrollable}
+
+A general equation for linear model can be written as
+$$
+Y \approx \beta_0 + \beta_1X
+$$
+
+$$\beta_0\hspace{1mm} is\hspace{1mm}population\hspace{1mm}intercept$$
+
+$$\beta_1\hspace{1mm} is\hspace{1mm}population\hspace{1mm}slope$$ Our estimates are represented as :
+
+$$ \hat\beta_0$$ $$\hat\beta_1$$
+
+## Do it Yourself - 2
+
+* Using the `starbucks` dataset, find the regression equation for relationship between the ages of husbands and wives
+* Using the `teacher` dataset, find the relationship between the amount paid to fica and the base salary of teachers
+
+
+## Least Squares Regression{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* It is a rigorous approach to fitting a line to a scatterplot
+* Use the `elmhurst` data from `openintro` package
+
+```{r scatterplot_elmhurst}
+#| eval: true
+#| echo: true
+#| output-location: column
+elmhurst %>%
+  ggplot(aes(x = family_income, y = gift_aid))+
+  geom_point() +
+  theme_light()
+```
+
+## What is the best estimate{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* The idea is to, essentially, draw a line through the points such that distance of every point from line is as small a possible i.e. least residuals
+* The dashed line represents the line that minimizes the sum of the absolute value of residuals, the solid line represents the line that minimizes the sum of squared residuals
+
+![Source : [Introduction to Modern Statistics](https://openintro-ims.netlify.app/07-model-slr_files/figure-html/elmhurstScatterW2Lines-1.png)](https://openintro-ims.netlify.app/07-model-slr_files/figure-html/elmhurstScatterW2Lines-1.png)
+
+## Least Square Line{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* One way to get estimates of population coefficients or parameters is minimizing least squares
+*  $$aid \approx \beta_0 + \beta_1*income$$
+
+$$\hat y_i = \hat\beta_0 + \hat\beta_1x_i$$ $$e_i = y_i - \hat y_i$$
+
+$$RSS = e_1^2 + e_2^2....+e_n^2$$
+
+## Minimzie RSS{.scrollable}
+
+*Least square coefficient estimates*
+
+$$
+\hat\beta_1 = \frac{\sum_i^n(x_i - \bar x)(y_i - \bar y)}{\sum_i^n(x_i - \bar x)^2}
+$$
+
+$$
+\hat\beta_0 = \bar y - \hat\beta_1\bar x 
+$$
+
+
+## Interpreting Regression Equation{.scrollable}
+
+* The `lm()` function is used to fit linear models in R
+* model_name <- (response_variable ~ predictor_variable , data)
+
+```{r elmhurst_equation}
+#| eval: true
+#| echo: true
+lm( gift_aid ~ family_income, data = elmhurst)
+```
+
+## Interpreting Regression Equation{.scrollable}
+
+::: incremental
+* The intercept 24.3193 signifies the gift aid when the family income is 0
+* For every increase in `$1` of family income, the gift aid given to the student **reduces** by `$0.0431`
+* Also means - for an increase of `$1000` of family income, gift aid **reduces** by `$43.1`
+
+:::
+
+## Do it Yourself - 3
+
+* From the previous regression equation using the `teacher` dataset, try to interpret the results from the intercept and the coefficient
+* Using the `bdims` dataset, find the regression equation for how the weight is related to height and interpret the results
+
+## Categorical Variable{.scrollable}
+
+* `mariokart` data in `openintro`
+* `cond` variable specifies whether the device is old or new
+
+```{r scatterplot_mariokart}
+#| eval: true
+#| echo: true
+#| output-location: column
+mariokart %>%
+  filter(total_pr <= 100) %>%
+  ggplot(aes(x = cond, y = total_pr))+
+  geom_point()+
+  theme_light()
+```
+
+## Categorical Variable{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+```{r equation_mariokart}
+#| eval: true
+#| echo: true
+#| output-location: column
+mariokart <- mariokart %>%
+  filter(total_pr <= 100)
+lm(total_pr ~ cond, data = mariokart)
+```
+
+* New devices get sold **on average** at $53.77
+* **On average**, used devices get sold at $10.90 less than new ones
+
+## Do it Yourself - 4
+
+* Using the `teacher` dataset, see how the degree that the teacher has affects their base salaries
+* What do the results mean?
+* Using the `census` data, check how sex of the individual affects their personal income
+* What could be the possible reasons for the result
+
+## Linear Regression with Multiple Predictors{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* The outcome variable is dependent on various predictors
+* `loans_full_schema` dataset from `openintro`
+
+```{r loans_open}
+openintro::loans_full_schema
+
+#create a new variable
+loans <- openintro::loans_full_schema %>%
+  mutate(credit_util = total_credit_utilized/total_credit_limit)
+```
+
+## Linear Regression with Multiple Predictors{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+```{r loans_singlepredictor}
+#| eval: true
+#| echo: true
+lm(interest_rate ~ public_record_bankrupt, data = loans)
+```
+
+* Individuals with bankruptcy record have a 0.74% higher interest rate than those who do not
+
+## Linear Regression with Multiple Predictors{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* There are categorical variables with more than two levels
+
+```{r loans_levelpredictor}
+#| eval: true
+#| echo: true
+lm(interest_rate ~ verified_income, data = loans)
+```
+
+* The results show the the relative difference for each level of `verified_income`
+* `Reference level`represents the default level that other levels are measured against
+* When fitting a regression model with a categorical variable that has k levels where k > 2, we get a coefficient for k−1 of those levels
+
+## Confounding Variables{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+::: incremental
+* Surprisingly, people with verified income have a higher interest rate. Why so?
+* There might be **confounding** variables
+* Maybe people who verified their income source in the first place did so because they had poor credit
+
+:::
+
+## Linear Regression with Multiple Predictors{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+```{r loans_manypredictors}
+#| eval: true
+#| echo: true
+lm(interest_rate ~ verified_income + debt_to_income + public_record_bankrupt +term + credit_util + issue_month, data = loans)
+```
+
+## Do it Yourself - 5
+
+* Using the `penguins` dataset from the `palmerpenguins` package, find and interpret the regression equation for the body mass of the penguins and their species
+* To the previous model, add the variables of sex, bill length, bill depth and island
+* Now try to understand the results
+
+## Thank You :){.center}
