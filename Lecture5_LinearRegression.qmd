@@ -83,9 +83,7 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 
 #### [Content for this topic has been sourced from [Danielle Navarro's 'Learning statistics with R'](https://learningstatisticswithr.com/lsr-0.6.pdf). Please check out her work for detailed information.]{style="font-size:15px"}
 
-* Ok, but what do these measures imply?
-
-![Danielle Navarro](https://files.mtstatic.com/site_4462/4570/0?Expires=1705350868&Signature=eNkyYXPkTT75gahk3r0LgNK4dwiN5gcO20rZ1qWB2dnkSD-90nDRTZs5MN-58Q0t9f-Z3cYYWFyZiSI8Ty9NUTw766xKvpcXKv8EAfnmDFcSqZyW9~0MGloQRKQR9DsKBXXZBezyu-XZdwvMj70bjVw5uEq7FzuLgc6qIIRB3bM_&Key-Pair-Id=APKAJ5Y6AV4GI7A555NA)
+>Ok, but what do these measures imply?
 
 * Mean is affected by outliers
 * Median is not affected by outliers
