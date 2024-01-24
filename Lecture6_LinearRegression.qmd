@@ -1,0 +1,227 @@
+---
+title: "Business Analytics"
+subtitle: "Linear Regression"
+author: "Ayush Patel and Jayati Sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite{.scrollable}
+
+::: incremental
+You already...
+
+- Have a knowledge of basic statistics
+- Understand univariate and multivariate linear regression
+- Understand linear regression with categorical variables  
+:::
+
+## Before we begin{.scrollable}
+
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(tidyverse)
+library(MASS)
+library(openintro)
+library(compositions)
+library(ISLR2)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About Me{.scrollable}
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Linear Regression Model{.scrollable}
+
+* The `lm()` function is used to fit linear models in R 
+* `Elmhurst` data from `openintro` package
+* To understand relation between gift aid and family income
+
+```{r elmhurst_equation}
+#| eval: true
+#| echo: true
+model <- lm( gift_aid ~ family_income, data = elmhurst)
+summary(model)
+```
+
+## Strength of a Fit{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* **R-squared** $R^2$: describes the amount of variation in the outcome variable that is explained by the least squares line
+
+Variance of the outcome variable
+
+```{r outcome_var}
+#| eval: true
+#| echo: true
+var(elmhurst$gift_aid)
+```
+
+Variance of the residuals
+
+```{r outcome_residuals_var}
+#| eval: true
+#| echo: true
+var.lm(model)
+```
+
+## Strength of a Fit{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* If we apply our least squares line, then this model reduces our uncertainty in predicting aid using a student’s family income
+
+* $(s_{outcome}^ 2 - s_{residual}^2)/s_{outcome}^2$
+
+* (29800 - 22800)/29800 $ \approx \ $= 24%
+
+## Strength of a Fit{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* There was a reduction of about 24% of the outcome variable’s variation by using information about family income for predicting aid using a linear model
+
+* Correlation between the two variables
+
+```{r correlation}
+#| eval: true
+#| echo: true
+cor(elmhurst$family_income, elmhurst$gift_aid)
+```
+
+* R-sqaured corresponds exactly to the squared value of the correlation
+* r = −0.499 -> $R^2$ = 0.25
+
+## Do it Yourself - 1
+
+* Use `auto` data from `ISLR2` 
+* What is the regression equation for finding how horsepower is dependent on weight
+* Fit a model for the above equation and find coefficients and $R^2$
+* What does the value of $R^2$ mean?
+
+## Adjusted R-squared{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* In multivariate regression, the equation for the line of best fit has some changes
+* The adjusted R-squared is calculated as : $R^2_{adj}= 1 - (1 - R^2)(n-1/n-k-1)$
+* where n = number of observations used to fit the model
+* k = number of predictor variables in the model
+* Note : a categorical predictor with p levels will contribute p − 1 to the number of variables in the model
+
+## Adjusted R-squared - Why?{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* The reasoning behind the adjusted R-squared lies in the **degrees of freedom** associated with each variance
+* Degrees of freedom - maximum number of independent values in dataset 
+* Equal to n - k − 1 in multiple regression
+* Adjusted $R^2$ formula helps correct this bias
+
+## Model Selection{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+::: incremental
+* Two common strategies for adding or removing variables in a multiple regression
+* **Backward elimination** starts with the full model
+* Variables are eliminated one-at-a-time from the model until we cannot improve the model any further
+* **Forward selection**  is the reverse of the backward elimination technique
+* We add variables one-at-a-time until we cannot find any variables that improve the model any further
+
+:::
+
+## Model Selection{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* Criteria for implementing selection method - $R^2$
+* Eliminate or add variables depending on whether they lead to the largest improvement in $R^2_{adj}$
+
+```{r loans_manypredictors_radj}
+#| eval: true
+#| echo: true
+loans <- openintro::loans_full_schema %>%
+  mutate(credit_util = total_credit_utilized/total_credit_limit)
+
+loan_model <- lm(interest_rate ~ verified_income + debt_to_income + public_record_bankrupt +term + credit_util + issue_month, data = loans)
+summary(loan_model)
+```
+
+## Do it Yourself - 2
+
+* Use `Credit` data from `ISLR2`
+* Use balance as response and create a model that you think is good. Try out qualitative variables as well.
+* Observe how the value of $R^2$ changes when you add/remove predictors. What do you infer from this?
+
+## Regression Diagnostics{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+::: incremental
+- Non-linearity of the response-predictor relationships
+- Correlation of error terms
+- Non-constant variance of error terms
+- Outliers
+- High-leverage points
+- Collinearity
+:::
+
+## Regression Diagnostics{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* **Linearity** - The data should show a linear trend
+    - If there is indication of non-linear relation, try non-linear transformations on you predictors
+* **Correlated Error terms** - We assume that $\epsilon_1, \epsilon_2, ...\epsilon_n$ are uncorrelated. This means that on reasonable deduction can be done about $\epsilon_{n+1}$ from the information we have about $\epsilon_n$.
+  - What if they are?
+  - recall that $SE$ is calculated based on this assumption.
+  - This means that in case there is correlation in error terms, we may end up trusting the model more than we should.
+  - This is often seem in time-series 
+  - How to test - Durbin-Watson test, Ljung-Box Q test
+
+## Regression Diagnostics{.scrollable}
+#### [Content for this topic has been sourced from the book ['Introduction to Modern Statistics'](https://openintro-ims.netlify.app/). Please check out the book for detailed information.]{style="font-size:15px"}
+
+* **Nearly normal residuals** - residuals must be nearly normal
+    - When residuals are not normal, it is usually because of outliers or concerns about influential points
+* **Constant or equal variability** - The variability of points around the least squares line should remain roughly constant
+
+## Regression Diagnostics{.scrollable}
+
+* **Collinearity** - When collinearity exists between two variables, it is difficult to say how individually one predictor is associated with response.
+  - Look at correlation matrix for all variables. (*Not a catch all solution - multi-collinearity*)
+  - The VIF is variance inflation factor, the ratio of the  variance of $\hat\beta_j$ when fitting the full model divided by the variance of $\hat\beta_j$ if fit on its own.
+  - VIF for individual predictor can be computed by:
+  
+  $$VIF(\hat\beta_j) = \frac{1}{1-R_{X_j|X_{-j}}^2}$$
+  
+  - Two was to deal with this. Drop predictors with high VIF or combine predictors into a single one. 
+
+## Thank You :){.center}
