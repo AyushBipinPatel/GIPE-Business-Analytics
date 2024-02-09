@@ -56,7 +56,7 @@ You will find all lecture slides populated here.
   + [Lecture 3: Data Visualization Basics and Refresher](Lecture3_DataVisualization.html)
   + [Lecture 4: Intro to Quarto - Literate Programming](Lecture4_Quarto_intro.html)
   + [Lecture 5: Intro to Linear Regression](https://ayushbipinpatel.github.io/GIPE-UG-Advanced-Analytics-with-R/lecture2.html#/title-slide)
-  + [Lecture 7: Advanced Data Wrangling](Lecture8_AdvancedDatawrangling.html)
+  + [Lecture 7: Advanced Data Wrangling](Lecture8_AdvancedDataWrangling.html)
 
 # References
 
