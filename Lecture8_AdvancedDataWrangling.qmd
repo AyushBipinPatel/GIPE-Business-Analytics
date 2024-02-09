@@ -10,6 +10,7 @@ format:
     embed-resources: true
     slide-number: c/t
     width: 1400
+    theme: [serif, theme.scss]
 ---
 
 ## Pre-requisite {.scrollable}
