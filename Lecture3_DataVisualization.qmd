@@ -1,7 +1,7 @@
 ---
 title: "Business Analytics"
 subtitle: "Data Visualization"
-author: "Ayush Patel"
+author: "Ayush Patel and Jayati Sharma"
 date: today
 date-format: "DD MMMM, YYYY"
 embed-resources: true
