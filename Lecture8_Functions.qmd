@@ -1,0 +1,316 @@
+---
+title: "Business Analytics"
+subtitle: "Writing Functions"
+author: "Ayush Patel and Jayati Sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite {.scrollable}
+
+::: incremental
+You already....
+
+-   Know basic and advanced data wrangling functions in R
+-   Know basics of data visualization in R
+-   Know univariate and multivariate linear regression
+:::
+
+## Before we begin {.scrollable}
+
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(dplyr)
+library(tidyverse)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About me {.scrollable}
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Learning Objectives {.scrollable}
+
+::: incremental
+-  Learn how to write functions in R
+-  Learn how to perform iterations
+:::
+
+## How can we do this better?{.scrollable}
+
++ Assume that you are working on the following dataset 
++ You want to multiply the variables with a certain number `0.837636`
++ One way to do this is as shown below
+
+```{r intro}
+#| eval: true
+#| echo: true
+
+data <- data.frame(id = rep(letters[8 :10], each = 2), 
+                   a = seq(5 ,10), b = seq(1,6), 
+                   c = seq(32,37), d = seq(19,24))
+
+new_data <- data %>%
+  mutate(new_a = 0.837636 * a, 
+         new_b = 0.837636 * b,
+         new_c = 0.837236 * c,
+         new_d = 0.837636 * d)
+
+```
+
+## How can we do this better?{.scrollable}
+
+::: incremental
+
++ However, there are two problems with this
++ This process can get tedious as the number of operations increase
++ Also, there can be mistakes in copy pasting the number, as can be seen in the third line of `mutate()` function
++ In such cases, it is better to write functions 
+
+:::
+
+## Writing a basic function{.scrollable}
+
++ For the previous problem, we can instead write a function to perform the same operation many times
++ The idea is to give it a name of your choice, use `function()` and specify the argument `x`, then wrap up your argument and specify the operation inside `{}`
++ You will soon learn how to write functions in detail
+
+```{r firstfunction}
+#| eval: true
+#| echo: true
+
+myfirstfunction <- function(x){0.837636 * x}
+
+ data %>%
+  mutate(new_a = myfirstfunction(a), 
+         new_b = myfirstfunction(b),
+         new_c = myfirstfunction(c),
+         new_d = myfirstfunction(d))
+```
+
+## Writing a basic function{.scrollable}
+
++ We can further modify our code to make it more clean
+
+```{r firstfunctionmodified}
+#| eval: true
+#| echo: true
+
+data %>%
+  mutate(across(a :d, myfirstfunction))
+```
+
+## Why to write a function?{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ It can be given any name, which makes the code easier to understand
++ Easier to update code
++ Reduces the chances of making mistakes while copying and pasting values
++ Overall makes the code clearer for future use
++ Good rule of thumb - Consider writing a function whenever you’ve copied and pasted a block of code more than twice
+
+## Using conditions in functions{.scrollable}
+
++ Let us move to writing more complex functions
++ Logic remains same; you add more conditions
++ Using `data`, you want to multiply 2 to an even number, or keep the number as it is if odd
+
+```{r logicalfunction}
+#| eval: true
+#| echo: true
+
+logic_multiply <- function(x){ifelse( x %% 2 == 0, x*2,x)}
+```
+
++ This function can now be used to transform `data`
+
+```{r logicalfunction_1}
+#| eval: true
+#| echo: true
+
+data %>%
+  mutate(across(a : d , logic_multiply))
+```
+
+## Do It Yourself -1{.scrollable}
+
++ Using `data`, multiply `1.77364` to all numeric variables by writing a function
++ Write a function to find square root of all nuemric variables in `data`
++ Write a function that multiplies the number by 2 if it is greater than 10, else keeps the number as it is
++ Write a function that multiplies the number by 2 if it is greater than 20, else multiplies it by 3 it is
+
+## Data Frame Functions{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ Beyond vector functions, it is also possible to write data frame functions
++ Data frame functions work like vector functions: they take a data frame as the first argument, some extra arguments that say what to do with it, and return a data frame or a vector
++ Suppose you want to perform a function on `data` where you want to group the variables by `id` and get the mean of numeric variables
+
+## Data Frame Functions{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ We can write the function easily using the arguments
++ Note: when we use variables from a data frame, we need to ***embrace*** them using `{{ }}`
++ This is because of **indirection**
++ Embracing a variable tells dplyr to use the value stored inside the argument, not the argument as the literal variable name
+
+```{r dataframefunction}
+#| eval: true
+#| echo: true
+
+grouped_mean <- function(dataframe, group_var, mean_var) {
+  dataframe %>%
+    group_by({{group_var}}) %>%
+    summarize(mean({{mean_var}}))}
+
+grouped_mean(data, id, a)
+```
+
+## Data Frame Functions{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ A common use for such functions is when you do your exploratory data analysis
++ You might want to see a certain set of descriptive statistics
++ Writing a function would b useful in such a case
+
+```{r myfunction}
+#| eval: true
+#| echo: true
+
+my_eda_function <- function(dataframe, variable) {
+  dataframe %>%
+    summarize(
+      count = n(),
+      minimum_value = min({{ variable}}, na.rm = TRUE),
+      maximum_value = max({{ variable}}, na.rm = TRUE),
+      range = max({{ variable}}, na.rm = TRUE) - min({{ variable}}, na.rm = TRUE)
+    )
+}
+
+my_eda_function(data,a)
+```
+
+## Do It Yourself -2{.scrollable}
+
++ Using the `ChickWeight` data from `datasets`, create your own summary function that gives the minimum, maximum and range of the `weight` variable
++ Write a function that groups by `diet` and gives the `weight`
+
+## Plot Functions{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ Along with returning a dataframe, functions can also return dataframes
++ Use the `diamonds` dataset from `ggplot2`
++ Suppose you want to create many histograms
++ Repeating each code with a difference in `binwidth` can be avoided
+
+```{r plotfunctions}
+#| eval: true
+#| echo: false
+
+diamonds %>% 
+  ggplot(aes(x = carat)) +
+  geom_histogram(binwidth = 0.1)
+
+diamonds %>%
+  ggplot(aes(x = carat)) +
+  geom_histogram(binwidth = 0.05)
+
+diamonds %>%
+  ggplot(aes(x = carat)) +
+  geom_histogram(binwidth = 0.3)
+
+```
+
+## Plot Functions - Example 1{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ Instead, a function an be written which reduces the task of making a plot everytime
+
+```{r plot_function_example}
+#| eval: true
+#| echo: true
+
+diamond_histogram_function <- function(data, variable, binwidth){
+  data %>%
+    ggplot(aes(x = {{ variable}})) +
+    geom_histogram(binwidth = binwidth)
+}
+```
+
+``` {r plot_show}
+#| eval: true
+#| echo: true
+
+diamond_histogram_function(diamonds, carat, 0.1)
+```
+
++ Can you guess why did we not embrace `binwidth` while writing the function?
+
+## Plot Functions with Data Wrangling{.scrollable}
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
++ Plot functions can be combined with data wrangling functions as well
++ To make a bar graph with the bars reordered in the descending order
+
+```{r plot_function_example_2}
+#| eval: true
+#| echo: true
+
+diamonds_sorted_bars <- function(dataframe, variable) {
+  dataframe %>% 
+    mutate({{ variable }} := fct_rev(fct_infreq({{ variable }})))  |>
+    ggplot(aes(y = {{ variable }})) +
+    geom_bar() +
+    theme_minimal()
+}
+```
+
+<br>
+
+``` {r example_show}
+#| eval: true
+#| echo: true
+
+diamonds %>%
+  diamonds_sorted_bars(clarity)
+```
+
+## Do It Yourself -3{.scrollable}
+
++ Using `diamonds` dataset, write a function for making a bar graph, and then using the function, plot `cut` and `color`
++ Write a function to plot histogram of varying binwidths, and then plot variables `x` and `y` using it
+
+## Thank You :){.center}

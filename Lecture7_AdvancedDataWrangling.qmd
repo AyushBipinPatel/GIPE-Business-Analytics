@@ -1,0 +1,702 @@
+---
+title: "Business Analytics"
+subtitle: "Advanced Data Wrangling"
+author: "Ayush Patel and Jayati Sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite {.scrollable}
+
+::: incremental
+You already....
+
+-   Know basics of data wrangling in R
+-   Know basics of data visualization in R
+-   Know univariate and multivariate linear regression
+:::
+
+## Before we begin {.scrollable}
+
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(dplyr)
+library(tidyverse)
+library(openintro)
+library(nycflights13)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About me {.scrollable}
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Learning Objectives {.scrollable}
+
+::: incremental
+-   Learn how to pivot and join data
+-   Learn how to work with missing values
+-   Learn how to use row wise functions
+:::
+
+## Tidy Data {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+-   Tidy data - a framework for consistent data structure
+-   Take a look at `table1` `table2` and `table3`, all part of `tidyverse`
+-   All contain the same information but in different ways
+
+```{r tidydata}
+#| echo: true
+
+table1
+table2
+table3
+```
+
+## Tidy Data - Rules {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+-   Advantages of tidy data structure - Consistent structure and uniformity
+-   Variables in columns, observations in rows and values in cells
+
+![Source : [R for Data Science 2e](https://r4ds.hadley.nz/images/tidy-1.png)](https://r4ds.hadley.nz/images/tidy-1.png)
+
+## First Things First - Let's Recap {.scrollable}
+
+-   Using `table1`, calculate the total number of cases per year
+-   How would you calculate the total number of cases per year with `table2`
+
+## Pivoting - Why? {.scrollable}
+
+-   Because data is often in an untidy structure
+-   Sometimes you also need to transform data because you need to get it into another specific format
+-   Pivot functions enable changing data from one format to another
+
+## Pivoting {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+-   When column names are not variable names but rather values
+
+```{r intro_pivot}
+#| eval: true
+#| echo: true
+
+table4a
+```
+
+-   Variables `1999` and `2000` are ***values*** of the `year` variable
+-   Values in these two variables represent the `cases` variable
+
+## Pivoting {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+::: incremental
+-   So exactly why do we need to change the structure of the data?
+-   Because here, one row represents 2 observations
+-   We need to
+    -   Select the columns that have values instead of variables (`1999` and `2000`)
+    -   Variable to move the column **names** to (`year`)
+    -   Variable to move the column **values** to (`cases`)
+-   All these steps are done together using **pivot_longer()**
+:::
+
+## Pivoting - pivot_longer() {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+```{r pivot_long}
+#| eval: true
+#| echo: true
+
+table4a %>%
+  pivot_longer(c(`1999`, `2000`), names_to = "year", values_to = "cases")
+```
+
+-   Converts data into longer format
+
+## Pivoting - pivot_wider() {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+-   `pivot_wider()` is the opposite of `pivot_longer()`
+-   Used when one observation is scattered along rows
+
+::: columns
+::: {.column width="50%"}
+```{r intro_pivot2}
+#| eval: true
+#| echo: true
+
+table2
+```
+:::
+
+::: {.column width="50%"}
+```{r pivot_wider}
+#| eval: true
+#| echo: true
+
+table2 %>%
+    pivot_wider(names_from = type, values_from = count)
+```
+:::
+:::
+
+## Do it Yourself - 1
+
+Run the following code in your console
+
+```{r DIY1}
+#| eval: true
+#| echo: true
+
+DIY1 <- data.frame(student_name = c("A","B","C","D","A","B","C","D"),
+                   subject = c("Maths","Maths","Maths","Maths","English","English","English","English"),
+                   grade = c(78,79,98,87, 77,65,69,80))
+```
+
+-   Is `DIY1` already in tidy data structure? If not, how would you change it?
+
+```{r DIY1_1}
+#| eval: true
+#| echo: true
+
+DIY1_1 <- data.frame(student_name = c("A","B","C","D"),
+                   P_1 = c(67,87,93,56),
+                   P_2 = c(86,57,68,94))
+```
+
+-   `DIY1_1` shows the grades of students in class for Periodical 1 and Periodical 2. Is the data in tidy format? If not, how would you transform it?
+
+## Joins - Why? {.scrollable}
+
+-   More than often, you work with multiple dataframes
+-   When you have all your individual dataframes in the required format, you might want to `join` all these datasets together
+-   Join function help in joining datasets by identifying matching observations
+
+## Joins - Keys {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+::: incremental
+-   To use join functions, it is important to understad what keys are
+-   Every join involves the following keys
+    -   **primary key** -variable that uniquely identifies each observation in a dataset
+    -   when more than one variable is needed, the key is called a compound key
+    -   **foreign key** - variable (or set of variables) that corresponds to a primary key in another table
+:::
+
+## Joins - Primary Key {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+```{r airplanes}
+#| eval: true
+#| echo: true
+
+nycflights13::airlines
+```
+
+-   `airlines` has two variables - carrier code and name
+-   You can identify an airline with its two letter carrier code, making carrier the primary key
+
+```{r weather}
+#| eval: true
+#| echo: true
+
+nycflights13::weather
+```
+
+-   `weather` records data about the weather at the origin airports
+-   You can identify each observation by the combination of location and time
+-   Hence, `origin` and `time_hour` become the compound primary key
+
+## Joins - Foreign Key {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+-   Foreign Key is a variable in a dataset that corresponds to the primary key of another dataset
+
+```{r foreign_key}
+#| eval: true
+#| echo: true
+
+nycflights13::flights
+nycflights13::planes
+```
+
+-   `flights$tailnum` is a foreign key that corresponds to the primary key `planes$tailnum`
+
+## Do It Yourself - 2 {.scrollable}
+
+-   What is the primary key for `airports` and `planes` data from `nycflights13`?
+-   What is the foreign key in `flights` that corresponds to the primary key in `airports`?
+
+## Joins - Structures {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+Relationships and connections between all datasets in the `nycflights13` package
+
+![Source : [R for Data Science 2e](https://r4ds.hadley.nz/diagrams/relational.png)](https://r4ds.hadley.nz/diagrams/relational.png)
+
+## What are join functions? {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+-   They take dataset 1 and 2 and join them to give a single dataframe
+-   The output of rows and columns is determined by dataset 1, in most cases
+-   Six join functions - `left_join()`,`inner_join()`,`right_join()`,`full_join()`,`semi_join()` and `anti_join()`
+-   **Mutating joins** ***combines*** variables to produce the resulting dataframe
+-   **Filtering joins** filter the rows from the two datasets to give the resulting dataframe
+
+## Dataset {.scrollable}
+
+Run the following code chunks in your console
+
+```{r join_data1}
+#| eval: true
+#| echo: true
+data1 <- data.frame(name = c("A","B","C","D","E","F","G", "H", "I", "J"),
+                   ID = c(193,176,6,273,132,182, 1, 42, 67,20),
+                   age = c(23,24,32,43,23,54, 23,20,40,53),
+                   state = c("MH", "MP", "KA", "MP", "UP", "GJ","MH", "UP", "MH", "TN"))
+```
+
+<br>
+
+```{r join_data2}
+#| eval: true
+#| echo: true
+data2 <- data.frame(id = c(193,176,6,273,132,182, 11, 13, 15),
+                   edu_level = c(12,8,10,12,12,0, 2,5,10))
+```
+
+## Left Join {.scrollable}
+
+-   Suppose you want to add the additional variable of educational level from `data2` to existing `data1`
+-   `left_join()` retains the first dataset (the one you are joining to)
+-   `join_by()` specifies the primary key to be used for joining
+-   Used mainly for joining additional variables
+-   The output contains rows only from `data1` and leaves out additional rows that it does not match to from `data2`
+-   Note: Rows in `data1` which are not present in `data2` have `NA` values in `edu_level`
+
+```{r left_join}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  left_join(data2, by = join_by(ID == id))
+```
+
+## Right Join {.scrollable}
+
+-   [Yes, you guessed it right... `right_join()` does the opposite]{.fragment fragment-index="1"}
+-   [Suppose we want to join **all** rows of `data2` to all the variables of `data1`]{.fragment fragment-index="2"}
+-   [By using a `right_join()` you have all the rows from `data2` joined to `data1`]{.fragment fragment-index="3"}
+-   [Rows from `data2` which are not in `data1` have NA values in remaining columns]{.fragment fragment-index="4"}
+
+::: {.fragment fragment-index="5"}
+```{r right_join}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  right_join(data2, by = join_by(ID == id))
+```
+:::
+
+## Inner Join {.scrollable}
+
+-   But what if you only want to see the rows with complete information? That is, rows common to both datasets
+-   `inner_join()` comes to the rescue
+
+```{r inner_join}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  inner_join(data2, by = join_by(ID == id))
+```
+
+## Full Join {.scrolllable}
+
+-   What if you want to keep all the rows from both the datasets
+-   We have the `full_join()`
+-   Has `NA` values where data is missing from `data1` and `data2`
+
+```{r full_join}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  full_join(data2, by = join_by(ID == id))
+```
+
+## Joins...and some more {.scrollable}
+
+-   Often we work with datsets that have many variables
+-   While joining, you can make your resulting dataset smaller by using basic `dplyr` functions
+
+```{r joins_and_select}
+#| eval: true
+#| echo: true
+
+data2 %>%
+  right_join(data1 %>% select(name, age, ID), by = join_by(id == ID))
+```
+
+## Do It Yourself -3 {.scrollable}
+
+-   From the `nycflights13`, how can you join `flights` and `airlines`
+-   Can `flights` and `planes` be joined? If yes, how?
+-   Do a left join of `flights` with and `planes`
+-   Now, do a right join of the same
+-   What does an inner join of the two look like?
+-   Perform a join using `flights` and `airlines` such that the resulting data has three variables - `carrier` , `name` and `origin`
+
+## Semi Join {.scrollable}
+
+-   Type of **filtering join**
+-   Keeps rows **only** from `data1` that have a match in `data2`
+-   For better understanding, compare output from semi join and inner join
+
+::: columns
+::: {.column width="50%"}
+```{r semi_join}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  semi_join(data2 , by = join_by(ID == id))
+```
+:::
+
+::: {.column width="50%"}
+```{r inner_join_comp}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  inner_join(data2 , by = join_by(ID == id))
+```
+:::
+:::
+
+## Anti Join {.scrollable}
+
+-   [Suppose you want to see the rows that **do NOT** match with the second dataset]{.fragment fragment-index="1"}
+-   [Anti joins helps identify rows that do not have matching data]{.fragment fragment-index="2"}
+-   [Can you guess what the ouput would look like when you use anti join `data1` with `data2`]{.fragment fragment-index="3"}
+
+::: {.fragment fragment-index="4"}
+```{r anti_joinl}
+#| eval: true
+#| echo: true
+
+data1 %>%
+  anti_join(data2 , by = join_by(ID == id))
+```
+:::
+
+## Do It Yourself -4 {.scrolllable}
+
+-   Do a semi join of `flights` with `airlines`
+-   How many observations in `flights` are **NOT** there in `planes` dataset? Check using an appropriate join function
+
+## Data structure ready...what next? {.scrollable}
+
+-   You got your data in tidy format
+-   You joined all such necessary datasets to get to the final dataset
+-   We will now learn more functions to perfom on the final dataset, for data cleaning and analysis
+
+## Missing Values {.scrollable}
+
+::: incremental
+-   A very important feature of data analysis: handling missing values
+-   Often, data won't be with all the values
+-   While handling missing values : context matters!
+-   Appropriate methods for handling missing values should be used only when you know the reason for the absence
+
+Load the following dataset
+
+```{r missing_values}
+#| eval: true
+#| echo: true
+
+hospital_visits <- data.frame(name = c("John", NA, NA, NA, "Dave", NA, NA, "Travis", NA, NA),
+                              year = c(2016, 2017, 2018, 2019, 2016, 2017, 2018, 2016, 2017, 2018),
+                              number_of_visits = c(8, 10, 12, NA, 10, 5, NA , 5, 7, NA))
+
+```
+:::
+
+## Missing Values {.scrollable}
+
+#### [Content for this topic has been sourced from [Hadley Wickham's 'R for Data Science (2e)'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+::: panel-tabset
+### Last Observation Carried forward
+
+-   Take a look at `hospital_visits`
+-   The first column `name` has NA values
+-   In this context, missing values indicate that the value in the previous row has been repeated
+-   The missing values can be filled using `tidyr::fill()`
+
+```{r locf}
+#| eval: true
+#| echo: true
+
+hospital_visits %>%
+  fill(name)
+```
+
+### Fixed Values
+
+-   In other contexts, missing values represent some fixed and known value, most commonly 0
+-   Look at the `number_of_visits` column, here NA means 0 visits
+-   `dplyr::coalesce()` can be used to replace them
+
+```{r fixed_values}
+#| eval: true
+#| echo: true
+
+hospital_visits$number_of_visits <- coalesce(hospital_visits$number_of_visits, 0)
+hospital_visits
+```
+:::
+
+## Dropping Missing Values {.scrollable}
+
+-   In other cases, NA values might be present because data was not collected/missing
+-   In such cases, you might want to remove the NA values
+-   Suppose there are some NA values in the `year` variable
+
+```{r missing_values_year}
+#| eval: true
+#| echo: true
+
+hospital_visits_year <- data.frame(name = c("John", NA, NA, NA, "Dave", NA, NA, "Travis", NA, NA),
+                              year = c(2016, 2017, NA, 2019, 2016, NA, 2018, NA, 2017, 2018),
+                              number_of_visits = c(8, 10, 12, NA, 10, 5, NA , 5, 7, NA))
+
+```
+
+-   In `hospital_visits`, we do not know what NA values in `year` and want to remove these observations fully
+-   `drop_na()` drops NA values from the `year` variable
+
+```{r drop_na()}
+#| eval: true
+#| echo: true
+
+hospital_visits_year %>%
+  drop_na(year)
+```
+
+-   Alternatively, you can also drop NA from the entire dataset using `drop_na()`
+
+```{r drop_na()_all}
+#| eval: true
+#| echo: true
+
+hospital_visits_year %>%
+  drop_na()
+```
+
+## Do It Yourself - 5 {.scrollable}
+
+Run the following in your console
+
+```{r DIY5}
+#| eval: false
+#| echo: true
+
+datasets::airquality
+```
+
+-   In the `Ozone` variable, replace all NA values with 0
+-   Drop all observations from the dataset where `Solar.R` is NA
+
+## More Functions - slice() {.scrollable}
+
+-   Now you have the dataset with no NA values using
+
+```{r slice_data_to_use}
+#| eval: true
+#| echo: true
+
+slice_data <- hospital_visits %>%
+  fill(name)
+
+slice_data$number_of_visits <- coalesce(slice_data$number_of_visits,0)
+```
+
+-   Suppose you want to see the only have the years where all people had the most maximum hospital visits
+-   Doing this might seem tedious, since every individual has multiple entries and different year for maximum hospital visits
+-   Thankfully, we have the `slice()` function
+
+## More Functions - slice() {.scrollable}
+
+#### [Content for this topic has been sourced from [dplyr](https://dplyr.tidyverse.org/reference/slice.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
+-   `slice()` allows indexing rows by their locations
+-   `slice(1)` would show the observation at the first position i.e. first observation
+
+```{r slice_intro}
+#| eval: true
+#| echo: true
+
+slice_data %>%
+  slice(1)
+```
+
+-   Similarly, `slice_min()` would give the minimum value
+
+```{r slice_min}
+#| eval: true
+#| echo: true
+
+slice_data %>%
+  slice_max(number_of_visits)
+```
+
+## More Functions - slice() {.scrollable}
+
+-   Let us come back now to our original question; highest number of hospital visits for all individuals
+-   We need the maximum count **AND** we need that for every individual
+-   Using a `group_by` , `arrange()` and then the `slice()` function would mean that it will return the first position for **each** group
+
+```{r slice_function}
+#| eval: true
+#| echo: true
+
+slice_data %>%
+  group_by(name) %>%
+  arrange(desc(number_of_visits)) %>%
+  slice(1)
+```
+
+## More Functions - rowwise() {.scrollable}
+
+-   Till now, we learnt functions that work for columns, like select, filter, mutate, slice etc.
+-   Think of `group_by`, it performs functions based on groups
+-   But what if you want to perform functions across **rows**?
+-   `rowwise()` helps in aggregating and performing functions on rows
+
+Run the following in your console
+
+```{r rowwise}
+#| eval: true
+#| echo: true
+
+row_data <- data.frame(id = c(1,2,3,4,5,6),
+                       income_source1 = c(10,15,12,14,20,18),
+                       income_source2 = c(12,14,11,16,25,15),
+                       income_source3 = c(20,25,22,24,30,28))
+```
+
+## More Functions - rowwise() {.scrollable}
+
+#### [Content for this topic has been sourced from [dplyr](https://dplyr.tidyverse.org/articles/rowwise.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
+-   You want to calculate the mean income that an indivial earns from all 3 sources
+
+-   This means mean of 3 rows for each individual
+
+-   Take a look at the difference between the two outputs
+
+-   Using only `mutate()` computes the mean of the three variables across **all** rows
+
+```{r rowwise_1}
+#| eval: true
+#| echo: true
+
+row_data %>%
+  mutate(mean_income = mean(c(income_source1, income_source2, income_source3)))
+```
+
+-   Using `rowwise()` gives mean of three variables for **each** row
+
+```{r rowwise_2}
+#| eval: true
+#| echo: true
+
+row_data %>%
+  rowwise() %>%
+  mutate(mean_income = mean(c(income_source1, income_source2, income_source3)))
+```
+
+## More Functions - c_across() {.scrollable}
+
+#### [Content for this topic has been sourced from [dplyr](https://dplyr.tidyverse.org/articles/rowwise.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
+-   Often, your dataset will have many variables
+-   It is quite tedious to type in all the variables
+-   `c_across` to the rescue!
+-   It uses tidy selection syntax for selecting many variables
+
+```{r c_across}
+#| eval: true
+#| echo: true
+
+row_data %>%
+  rowwise() %>%
+  mutate(total_income = sum(c_across(income_source1 : income_source3)))
+```
+
+```{r c_across_2}
+#| eval: true
+#| echo: true
+
+row_data %>%
+  rowwise() %>%
+  mutate(total_income = rowSums(pick(where(is.numeric), -id)))
+```
+
+## Do It Yourself - 6 {.scrollable}
+
+-   Use `yrbss` data from `openintro` package
+-   Slice the data in such a way to see the 157th observation
+-   Slice the data in such a way to see the 10th to 15th observations
+-   Slice the data by `grade`, in order to see the first observation of one person from each grade
+-   Calculate the mean of `physically_active_7d` and `strength_training_7d` for each individual
+
+## Thank You :) {.center}
