@@ -121,6 +121,24 @@ myfirstfunction <- function(x){0.837636 * x}
          new_d = myfirstfunction(d))
 ```
 
+## What is happening when we write a function?{.scrollable}
+
++ What was the logic behind the previous function?
+
+```{r function_logic}
+#| eval: false
+#| echo: true
+
+function_name <- function(parameters){
+ function_body 
+}
+
+```
+
++ Each function that you write needs a unique `function_name`, ideally one that easily explains the use of the function
++ `parameters` are the inputs (variables, dataframes etc) that we want our function to take
++ `function_body` is where we instruct the function of the operations we need it to perform
+
 ## Writing a basic function{.scrollable}
 
 + We can further modify our code to make it more clean
