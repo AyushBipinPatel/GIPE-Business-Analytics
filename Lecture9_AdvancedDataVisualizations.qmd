@@ -1,0 +1,156 @@
+---
+title: "Business Analytics"
+subtitle: "Advanced Data Visualizations"
+author: "Ayush Patel and Jayati Sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite {.scrollable}
+
+::: incremental
+You already....
+
+-   Know basic and advanced data wrangling functions in R
+-   Know basics of data visualization in R
+-   Can write functions in R
+:::
+
+## Before we begin {.scrollable}
+
+Please install and load the following packages
+
+```{r loading}
+#| echo: true
+
+library(dplyr)
+library(tidyverse)
+library(patchwork)
+library(ggiraph)
+library(gghighlight)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About me {.scrollable}
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Learning Objectives {.scrollable}
+
+::: incremental
+
++ Learn annotation for graphs in R
++ Learn how to combine graphs
++ Learn scaling functions in R
++ Learn how to make ggplot graphs interactive
+:::
+
+## Annotations in ggplot{.scrollable}
+
+#### [Content for this topic has been sourced from [ggplot2](https://ggplot2.tidyverse.org/reference/annotate.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ In addition to plotting your graph, you want to provide additional details to explain your graph
++ Text annotations are useful in this case
++ The `annotate()` function can be used for any kind of geometric object
++ Let us begin by text annotations
++ In the `annotate()` function, the type of geom is specified first
++ Then, the positining is required (x and y coordinates in this case)
++ This is followed by the label
+
+```{r text_annotation}
+#| eval: true
+#| echo: true
+
+ ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+   annotate("text", x = 4, y = 25, label = "Annotation Text")
+```
+
+## Annotations in ggplot{.scrollable}
+
+#### [Content for this topic has been sourced from [ggplot2](https://ggplot2.tidyverse.org/reference/annotate.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Further, annotations can be customized 
+
+```{r text_annotation_custom}
+#| eval: true
+#| echo: true
+
+ ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+   annotate("text", x = 4, y = 25, label = "Annotation Text", colour = "orange", size = 8)
+```
+
+```{r text_annotation_custom1}
+#| eval: true
+#| echo: true
+
+ ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+   annotate("text", x = 1:5, y = 6, label = "Annotation Text", colour = "orange", size = 3)
+```
+
+## Annotations in ggplot{.scrollable}
+
+#### [Content for this topic has been sourced from [ggplot2](https://ggplot2.tidyverse.org/reference/annotate.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Similar to text annotation, other geoms can be used for annotations
++ However, instead of `x` and `y`, `xmin` and `xmax` is used for coordinates of the rectangle
++ Do you remember what `alpha` is used for?
+
+```{r rect_annotation}
+#| eval: true
+#| echo: true
+
+ ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+   annotate("rect", xmin = 4.8, xmax = 5.7, ymin = 10, ymax = 18.6, alpha = .2)
+```
+
+## Annotations in ggplot{.scrollable}
+
+#### [Content for this topic has been sourced from [ggplot2](https://ggplot2.tidyverse.org/reference/annotate.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Suppose you want to add a line segment to your graph
++ `annotate()` over here requires `x` and `xend` coordinates
+
+```{r segment_annotation}
+#| eval: true
+#| echo: true
+
+ ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+   annotate("segment", x = 4.8, xend = 5.7, y = 10, yend = 18.6, colour = "red")
+```
+
+## Scales{.scrollable}
