@@ -32,6 +32,7 @@ Please install and load the following packages
 
 library(dplyr)
 library(tidyverse)
+library(scales)
 library(patchwork)
 library(ggiraph)
 library(gghighlight)
@@ -75,14 +76,20 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 + Learn how to make ggplot graphs interactive
 :::
 
-## Annotations in ggplot{.scrollable}
+## Let's Recap{.scrollable}
 
++ In the data visualization lecture, you learnt how to create various types of graphs using `ggplot2`
++ Some of them include bar, graph, line graph, scatter plots etc
++ For effective data visualization and communication, any plot requires modifications
++ These include annotations on the plot, modification of axes and scales, highlighting and interactivity of the plot
++ The aim of this lecture is to move beyond making graphs, towards clear and effective visualizations
+
+## Annotations in ggplot - Text{.scrollable}
 #### [Content for this topic has been sourced from [ggplot2](https://ggplot2.tidyverse.org/reference/annotate.html). Please check out the work for detailed information.]{style="font-size:15px"}
 
 + In addition to plotting your graph, you want to provide additional details to explain your graph
 + Text annotations are useful in this case
 + The `annotate()` function can be used for any kind of geometric object
-+ Let us begin by text annotations
 + In the `annotate()` function, the type of geom is specified first
 + Then, the positining is required (x and y coordinates in this case)
 + This is followed by the label
@@ -91,7 +98,7 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 #| eval: true
 #| echo: true
 
- ggplot(mtcars, aes(x = wt, y = mpg)) +
+ggplot(mtcars, aes(x = wt, y = mpg)) +
    geom_point()+
    annotate("text", x = 4, y = 25, label = "Annotation Text")
 ```
@@ -131,10 +138,15 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 ```{r rect_annotation}
 #| eval: true
 #| echo: true
+#| output-location: column
 
- ggplot(mtcars, aes(x = wt, y = mpg)) +
+ggplot(mtcars, aes(x = wt, y = mpg)) +
    geom_point()+
-   annotate("rect", xmin = 4.8, xmax = 5.7, ymin = 10, ymax = 18.6, alpha = .2)
+   annotate("rect", xmin = 4.8, 
+            xmax = 5.7,
+            ymin = 10,
+            ymax = 18.6, 
+            alpha = .2)
 ```
 
 ## Annotations in ggplot{.scrollable}
@@ -147,10 +159,135 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 ```{r segment_annotation}
 #| eval: true
 #| echo: true
+#| output-location: column
 
- ggplot(mtcars, aes(x = wt, y = mpg)) +
+ggplot(mtcars, aes(x = wt, y = mpg)) +
    geom_point()+
-   annotate("segment", x = 4.8, xend = 5.7, y = 10, yend = 18.6, colour = "red")
+   annotate("segment", x = 4.8,
+            xend = 5.7,
+            y = 10,
+            yend = 18.6,
+            colour = "red")
 ```
+
+## Do it Yourself -1{.scrollable}
+
+## Scales Functions in ggplot2 - Why?{.scrollable}
+
++ When you create a graph, using `ggplot2`, the axes are mapped automatically based on the data
++ However, you would often need to change the axes in order to effectively present the data
++ the `scale` functions in `ggplot2`:
+  - control how the data is plotted
+  - allow manipulation of axes
+  - improves overall appearances of the plot for effective data communication
+  
+## Scales Functions in ggplot2{.scrollable}
+
++ Look at the scatter plot of `wt` and `mpg`
+
+```{r scale_intro}
+#| eval: true
+#| echo: true
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()
+```
+
++ What if you want both the axes to start from 0?
++ `scale_y_continuous()` allows you to set the range for the y-axis
++ `limits` inside the `scale_y_continuous()` provides limits of the scale
++ Over here, `NA` is used to refer to the existing maximum
+
+```{r scale_ylim}
+#| eval: true
+#| echo: true
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+  scale_y_continuous(limits = c(0, NA))
+```
+
+## Scales Functions in ggplot2{.scrollable}
+
++ Instead of using `NA`, if you had to provide `40` as the limit for y-axis
+
+```{r scale_ylim_specify}
+#| eval: true
+#| echo: true
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+  scale_y_continuous(limits = c(0, 40))
+```
+
+## Scales Functions in ggplot2 - Adding breaks{.scrollable}
+
++ Setting `breaks` in the `scale_y_continuous` allows you to set what intervals the axis will have
+
+```{r scale_ylim_breaks}
+#| eval: true
+#| echo: true
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+  scale_y_continuous(breaks = seq(0, 40, 7))
+```
+
+## Scales Functions in ggplot2{.scrollable}
+
+#### [Content for this topic has been sourced from [ggplot2](https://ggplot2.tidyverse.org/reference/scale_brewer.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ The `scale_colour_brewer()` options are useful for plotting discrete values on your graph
++ The brewer scales provide sequential colour schemes from ColorBrewer
++ Look at the two charts
++ `scale_colour_brewer` helps in effcient mapping of discrete variables
+
+::: columns
+::: {.column width="50%"}
+```{r without_scale_colour_brewer}
+#| eval: true
+#| echo: true
+#| 
+
+ggplot(mpg, aes(x = displ, y = cty)) +
+   geom_point(aes(colour = class))
+```
+
+:::
+
+::: {.column width="50%"}
+
+```{r scale_colour_brewer}
+#| eval: true
+#| echo: true
+#| 
+
+ggplot(mpg, aes(x = displ, y = cty)) +
+   geom_point(aes(colour = class))+
+  scale_colour_brewer()
+```
+
+:::
+:::
+
+## Do It Yourself -2{.scrollable}
+
+## Scales Package{.scrollable}
+
+::: columns
+::: {.column width="60%"}
+
++ The `scales` package many scaling functions for visualizations
++ It allows for sophisticated customisation of data in a plot
++ Functions for readable and informative axes
+
+:::
+
+::: {.column width="40%"}
+
+![Source : [Scale Functions for Visualizations](https://scales.r-lib.org)](https://scales.r-lib.org/logo.svg)
+
+:::
+:::
 
 ## Scales{.scrollable}
