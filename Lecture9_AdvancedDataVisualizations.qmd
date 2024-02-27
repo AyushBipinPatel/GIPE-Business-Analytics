@@ -207,6 +207,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
   scale_y_continuous(limits = c(0, NA))
 ```
 
+
 ## Scales Functions in ggplot2{.scrollable}
 
 + Instead of using `NA`, if you had to provide `40` as the limit for y-axis
@@ -220,7 +221,7 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
   scale_y_continuous(limits = c(0, 40))
 ```
 
-## Scales Functions in ggplot2 - Adding breaks{.scrollable}
+## Scales Functions in ggplot2{.scrollable}
 
 + Setting `breaks` in the `scale_y_continuous` allows you to set what intervals the axis will have
 
@@ -231,6 +232,30 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ggplot(mtcars, aes(x = wt, y = mpg)) +
    geom_point()+
   scale_y_continuous(breaks = seq(0, 40, 7))
+```
+
+## Scales Functions in ggplot2{.scrollable}
+
++ Similarly, there are other transformations for scale - reversing the scale
+
+```{r reverses}
+#| eval: true
+#| echo: true
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+  scale_y_reverse()
+```
+
++ `scale_y_log10()` does log transformation of the scale
+
+```{r log}
+#| eval: true
+#| echo: true
+
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+   geom_point()+
+  scale_y_log10()
 ```
 
 ## Scales Functions in ggplot2{.scrollable}
@@ -247,7 +272,6 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 ```{r without_scale_colour_brewer}
 #| eval: true
 #| echo: true
-#| 
 
 ggplot(mpg, aes(x = displ, y = cty)) +
    geom_point(aes(colour = class))
@@ -260,7 +284,6 @@ ggplot(mpg, aes(x = displ, y = cty)) +
 ```{r scale_colour_brewer}
 #| eval: true
 #| echo: true
-#| 
 
 ggplot(mpg, aes(x = displ, y = cty)) +
    geom_point(aes(colour = class))+
@@ -291,3 +314,111 @@ ggplot(mpg, aes(x = displ, y = cty)) +
 :::
 
 ## Scales{.scrollable}
+#### [Content for this topic has been sourced from [scales](https://scales.r-lib.org). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Look at the following chart made using `txhousing` data
++ We want to make it more readable and clear
++ The number of zeroes on the y-axis can be reduced along with the way years are represented on the x-axis
+
+```{r scales_package_old}
+#| eval: true
+#| echo: true
+
+txhousing %>% 
+  mutate(date = make_date(year, month, 1)) %>% 
+  group_by(city) %>% 
+  filter(min(sales) > 500) %>% 
+  ggplot(aes(date, sales, group = city)) + 
+  geom_line(na.rm = TRUE)
+```
+
+## Scales{.scrollable}
+#### [Content for this topic has been sourced from [scales](https://scales.r-lib.org). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Similar to the scale functions in `ggplot2`, the `scales` package has functions for `breaks` and `labels`
++ the `breaks_width` function provides a way to show every two years on the axis, while the `label_date` provides a way to show the last two digits of the year using `%y`, making it more clear
++ On the y-axis. the `cut_short_scale()` function removes the additional 0 and supplements the `K` sign
+
+```{r scales_package_new}
+#| eval: true
+#| echo: true
+
+txhousing %>% 
+  mutate(date = make_date(year, month, 1)) %>% 
+  group_by(city) %>% 
+  filter(min(sales) > 500) %>% 
+  ggplot(aes(date, sales, group = city)) + 
+  geom_line(na.rm = TRUE) + 
+  scale_x_date(
+    NULL,
+    breaks = scales::breaks_width("2 years"), 
+    labels = scales::label_date("'%y")) + 
+  scale_y_log10(
+    "Total sales",
+    labels = scales::label_number(scale_cut = scales::cut_short_scale()))
+```
+
+## Scales{.scrollable}
+#### [Content for this topic has been sourced from [scales](https://scales.r-lib.org). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Let us try modifying another graph using `economics` data
+
+```{r scales_economics}
+#| eval: true
+#| echo: true
+
+economics %>% 
+  filter(date < ymd("1970-01-01")) %>% 
+  ggplot(aes(date, pce)) + 
+  geom_line()
+```
+
++ How can this be made more readable?
++ For x-axis, one option is to show the dates along with a few months, for better insights
++ For the y-axis, a label that adds the dollar sign would make the chart more readable
+
+## Scales{.scrollable}
+#### [Content for this topic has been sourced from [scales](https://scales.r-lib.org). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ `breaks_width` sets intervals for 3 months
++ However, you might want the axes to have the date format in months
++ `label_date_short()` does the task of shortening the date lengths
+
+```{r scales_economics_x}
+#| eval: true
+#| echo: true
+
+economics %>% 
+  filter(date < ymd("1970-01-01")) %>% 
+  ggplot(aes(date, pce)) + 
+  geom_line() + 
+  scale_x_date(NULL,
+    breaks = scales::breaks_width("3 months"), 
+    labels = scales::label_date_short())
+```
+
+## Scales{.scrollable}
+#### [Content for this topic has been sourced from [scales](https://scales.r-lib.org). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ For the y-axis, you can set breaks as you desire using `breaks_extended()`
++ `label_dollar()` adds a dollar sign to the y-axis
+
+```{r scales_economics_y}
+#| eval: true
+#| echo: true
+
+economics %>% 
+  filter(date < ymd("1970-01-01")) %>% 
+  ggplot(aes(date, pce)) + 
+  geom_line() + 
+  scale_x_date(NULL,
+    breaks = scales::breaks_width("3 months"), 
+    labels = scales::label_date_short()) + 
+  scale_y_continuous("Personal consumption expenditures",
+    breaks = scales::breaks_extended(8),
+    labels = scales::label_dollar())
+```
+
+## Do it Yourself -3{.scrollable}
+
+## Patchwork{.scrollable}
