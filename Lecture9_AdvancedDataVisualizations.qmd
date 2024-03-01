@@ -422,3 +422,84 @@ economics %>%
 ## Do it Yourself -3{.scrollable}
 
 ## Patchwork{.scrollable}
+
++ You have made multiple by now and want to combine them into the same graphic
++ A very easy way to do this by using `patchwork`
++ Let us learn this using our recently made plots
+
+```{r patchwork_example}
+#| eval: true
+#| echo: true
+
+p1 <- economics %>% 
+  filter(date < ymd("1970-01-01")) %>% 
+  ggplot(aes(date, pce)) + 
+  geom_line()
+
+p2 <- economics %>% 
+  filter(date < ymd("1970-01-01")) %>% 
+  ggplot(aes(date, pce)) + 
+  geom_line() + 
+  scale_x_date(NULL,
+    breaks = scales::breaks_width("3 months"), 
+    labels = scales::label_date_short())
+
+p3 <- economics %>% 
+  filter(date < ymd("1970-01-01")) %>% 
+  ggplot(aes(date, pce)) + 
+  geom_line() + 
+  scale_x_date(NULL,
+    breaks = scales::breaks_width("3 months"), 
+    labels = scales::label_date_short()) + 
+  scale_y_continuous("Personal consumption expenditures",
+    breaks = scales::breaks_extended(8),
+    labels = scales::label_dollar())
+
+```
+
+## Patchwork{.scrollable}
+
++ The usage of `patchwork` is very simple: you literally just add plots together!
+
+```{r patchwork_1}
+#| eval: true
+#| echo: true
+
+p1 + p2
+```
+
++ You can also put the plots one below the other
+
+```{r patchwork_2}
+#| eval: true
+#| echo: true
+
+p1 / p2
+```
+
+## Patchwork{.scrollable}
+
++ While plots `p1` and `p2` show the intermediate steps, `p3` is the final plot
++ It would be better to have the two at the top and the final one at the bottom
+
+```{r patchwork_3}
+#| eval: true
+#| echo: true
+(p1 + p2) / p3
+```
+
+## Patchwork{.scrollable}
+
++ After combining all the plots, you would want to modify all plots at once
+
+```{r combine_patchword}
+#| eval: true
+#| echo: true
+
+patchwork <- (p1 + p2) / p3
+patchwork & theme_minimal()
+```
+
+## Do it Yourself - 4{.scrollable}
+
+## Highlight information - `gghighlight()`{.scrollable}
