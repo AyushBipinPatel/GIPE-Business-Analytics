@@ -503,3 +503,5 @@ patchwork & theme_minimal()
 ## Do it Yourself - 4{.scrollable}
 
 ## Highlight information - `gghighlight()`{.scrollable}
+
+##
