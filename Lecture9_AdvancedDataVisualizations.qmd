@@ -534,7 +534,7 @@ patchwork & theme_minimal()
 ## Highlight information - gghighlight(){.scrollable}
 #### [Content for this topic has been sourced from [Hiroaki Yutani's work](https://yutannihilation.github.io/gghighlight/articles/gghighlight.html). Please check out the work for detailed information.]{style="font-size:15px"}
 
-+ Run the following code to generate a dataset randomly
++ Run the following code to generate a random dataset
 
 ```{r highlight_dataset}
 #| eval: true
@@ -551,7 +551,7 @@ data <- purrr::map_dfr(letters, ~ data.frame(
 
 + Suppose you want to plot the value of each id
 
-```{r gghighlight_intro}
+```{r gghighlight_intro_plot}
 #| eval: true
 #| echo: true
 #| output-location: column
