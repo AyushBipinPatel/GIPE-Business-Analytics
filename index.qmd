@@ -17,7 +17,7 @@ If you have R and RStudio installed on your laptops that is great. *Please, make
 **If you do not have R and/or RStudio installed, see the following:**
 
   + Get R from [Here](https://cran.icts.res.in/)
-  + Get RStudio from [Here](https://posit.co/download/rstudio-desktop/). Only download RStudio. No need to download R if you have it.    
+  + Get RStudio from [Here](https://posit.co/download/rstudio-desktop/). Only download RStudio. No need to download R if you have it.   
 
 ## Libraries
 
