@@ -36,6 +36,8 @@ library(scales)
 library(patchwork)
 library(ggiraph)
 library(gghighlight)
+library(ISLR2)
+library(openintro)
 ```
 
 <br> <br>
@@ -172,6 +174,12 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
 
 ## Do it Yourself -1{.scrollable}
 
++ Load the `Auto` data from `ISLR2` package
++ Make a scatterplot of `horsepower` and `acceleration` 
++ To the plot, add the text `Horsepower vs. Acceleration`
++ Add a rectangle to the plot, such that it covers the area where horsepower is higher than 200 but acceleration is still lesser than 15
++ Add a line to the plot from the coordinates (50,10) to (150,20)
+
 ## Scales Functions in ggplot2 - Why?{.scrollable}
 
 + When you create a graph, using `ggplot2`, the axes are mapped automatically based on the data
@@ -294,6 +302,11 @@ ggplot(mpg, aes(x = displ, y = cty)) +
 :::
 
 ## Do It Yourself -2{.scrollable}
+
++ Using the `Auto` data, plot a scatterplot between y = `weight` and x = `displacement`
++ Set the x-axis with breaks as 50
++ Set the breaks for y-axis as 5
++ What variable according to you can be used as the colour for the points? How?
 
 ## Scales Package{.scrollable}
 
@@ -421,6 +434,10 @@ economics %>%
 
 ## Do it Yourself -3{.scrollable}
 
++ Load the `tourism` data from `openintro`
++ Make a line graph of year and tourist spending
++ Is there any change you could make to the chart for better readability?
+
 ## Patchwork{.scrollable}
 
 + You have made multiple by now and want to combine them into the same graphic
@@ -502,6 +519,33 @@ patchwork & theme_minimal()
 
 ## Do it Yourself - 4{.scrollable}
 
-## Highlight information - `gghighlight()`{.scrollable}
++ From the `tourism` data, make line charts of `year` and `visitor_count_tho`, one for each decade
++ Combine these charts in such a way that at the top, the graph for all years is displayed and below it, there are 5 charts, one for each decade
 
-##
+## Highlight information - gghighlight(){.scrollable}
+#### [Content for this topic has been sourced from [Hiroaki Yutani's work](https://yutannihilation.github.io/gghighlight/articles/gghighlight.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Run the following code to generate a dataset randomly
+
+```{r highlight_dataset}
+#| eval: true
+#| echo: true
+
+set.seed(2)
+data <- purrr::map_dfr(letters, ~ data.frame(
+      id = 1:500,
+      value = cumsum(runif(500, -5, 5)),
+      type = .,
+      flag = sample(c(TRUE, FALSE), size = 500, replace = TRUE),
+      stringsAsFactors = FALSE))
+```
+
++ Suppose you want to plot the value of each id
+
+```{r gghighlight_intro}
+#| eval: true
+#| echo: true
+
+ggplot(data) +
+  geom_line(aes(x= id, y = value, colour = type))
+```
