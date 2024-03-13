@@ -99,6 +99,7 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 ```{r text_annotation}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 ggplot(mtcars, aes(x = wt, y = mpg)) +
    geom_point()+
@@ -336,6 +337,7 @@ ggplot(mpg, aes(x = displ, y = cty)) +
 ```{r scales_package_old}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 txhousing %>% 
   mutate(date = make_date(year, month, 1)) %>% 
@@ -355,6 +357,7 @@ txhousing %>%
 ```{r scales_package_new}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 txhousing %>% 
   mutate(date = make_date(year, month, 1)) %>% 
@@ -379,6 +382,7 @@ txhousing %>%
 ```{r scales_economics}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 economics %>% 
   filter(date < ymd("1970-01-01")) %>% 
@@ -400,6 +404,7 @@ economics %>%
 ```{r scales_economics_x}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 economics %>% 
   filter(date < ymd("1970-01-01")) %>% 
@@ -419,6 +424,7 @@ economics %>%
 ```{r scales_economics_y}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 economics %>% 
   filter(date < ymd("1970-01-01")) %>% 
@@ -502,6 +508,8 @@ p1 / p2
 ```{r patchwork_3}
 #| eval: true
 #| echo: true
+#| output-location: column
+
 (p1 + p2) / p3
 ```
 
@@ -512,6 +520,7 @@ p1 / p2
 ```{r combine_patchword}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 patchwork <- (p1 + p2) / p3
 patchwork & theme_minimal()
@@ -545,6 +554,7 @@ data <- purrr::map_dfr(letters, ~ data.frame(
 ```{r gghighlight_intro}
 #| eval: true
 #| echo: true
+#| output-location: column
 
 ggplot(data) +
   geom_line(aes(x= id, y = value, colour = type))
