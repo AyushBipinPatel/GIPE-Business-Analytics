@@ -34,10 +34,12 @@ library(dplyr)
 library(tidyverse)
 library(scales)
 library(patchwork)
-library(ggiraph)
 library(gghighlight)
+library(ggiraph)
 library(ISLR2)
 library(openintro)
+library(janitor)
+library(gapminder)
 ```
 
 <br> <br>
@@ -559,3 +561,259 @@ data <- purrr::map_dfr(letters, ~ data.frame(
 ggplot(data) +
   geom_line(aes(x= id, y = value, colour = type))
 ```
+## Highlight information - gghighlight(){.scrollable}
+#### [Content for this topic has been sourced from [Hiroaki Yutani's work](https://yutannihilation.github.io/gghighlight/articles/gghighlight.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Too much clutter right?
++ You can highlight only the lines with the biggest `value` 
+
+``` {r highlight_biggest_value}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+data_filtered <- data %>%
+  group_by(type) %>% 
+  filter(max(value) > 112) %>%
+  ungroup()
+
+ggplot(data_filtered) +
+  geom_line(aes(id, value, colour = type))
+```
+
+## Highlight information - gghighlight(){.scrollable}
+#### [Content for this topic has been sourced from [Hiroaki Yutani's work](https://yutannihilation.github.io/gghighlight/articles/gghighlight.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ However, that takes away the context of our visualization
++ Also, very tiresome
++ `gghighlight()` comes handy here
++ Think of it as the `filter()` equivalent of `ggplot2`
+
+```{r gghighlight}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+ggplot(data) +
+  geom_line(aes(id, value, colour = type)) +
+  gghighlight(max(value) > 112)
+```
+
++ You can customise plots as well
+
+```{r gghighlight_customise}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+ggplot(data) +
+  geom_line(aes(id, value, colour = type)) +
+  gghighlight(max(value) > 112)+
+  theme_minimal()
+```
+
+## Highlight information - gghighlight(){.scrollable}
+#### [Content for this topic has been sourced from [Hiroaki Yutani's work](https://yutannihilation.github.io/gghighlight/articles/gghighlight.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Similarly, you can highlight other types of geoms as well
+
+```{r other_geom_highlight_1}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+ggplot(mpg)+
+  geom_point(aes(displ, cty))+
+  gghighlight(displ >= 5)
+```
+
++ You can use more than one condition for gghighlight
+
+```{r other_geom_highlight_2}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+ggplot(mpg)+
+  geom_point(aes(displ, cty))+
+  gghighlight(displ >= 5, cty >= 15)
+```
+
+## Highlight information - gghighlight(){.scrollable}
+#### [Content for this topic has been sourced from [Hiroaki Yutani's work](https://yutannihilation.github.io/gghighlight/articles/gghighlight.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ You can select the number of values you want to highlight using `max_highlight`
+
+```{r gghighlight_max_options}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+ggplot(data) +
+  geom_line(aes(id, value, colour = type)) +
+  gghighlight(max(value), max_highlight =  5L)
+```
+
+## Do it Yourself - 5{.scrollable}
+
++ Use `txhousing` data from `ggplot2` and make a new dataset called `txhousing_sales` which calculates the total sales of each city for the year
++ Now, make a line chart of total sales over the years for all cities. Highlight the top 4 cities
++ From `txhousing_sales`, filter for the year 2015 and make a bar chart which shows the `total_sales` for all cities. Highlight the top 5
+
+## Creating interactive Visualizations - ggiraph(){.scrollable}
+#### [Content for this topic has been sourced from [Albert Rapp's work](https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Til now, we have learnt so many ways of making effective visualizations
++ When we add interactivity to our plots, it would make it very easy for people to focus on what they find important
++ `ggiraph` helps turn our graphs into an interactive visualization
++ It can be combined with many other features to connect different visualizations and communicate data-driven insights
++ Run the following code for data preperation
+
+```{r ggiraph_data_prep}
+#| eval: true
+#| echo: true
+
+gapminder_data <- gapminder::gapminder %>%
+  janitor::clean_names() %>%
+  mutate(id = levels(continent)[as.numeric(continent)],
+    continent = forcats::fct_reorder(continent, life_exp))
+
+mean_life_exps <- gapminder_data %>% 
+  group_by(continent, year, id) %>%
+  summarise(mean_life_exp = mean(life_exp)) %>%
+  ungroup()
+```
+
+## Creating interactive Visualizations - ggiraph(){.scrollable}
+#### [Content for this topic has been sourced from [Albert Rapp's work](https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Let us make a simple line chart first
+
+``` {r simple_line_chart_ggiraph}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+line_chart <- mean_life_exps %>%
+  ggplot(aes(x = year, y = mean_life_exp, col = continent)) +
+  geom_line(linewidth = 2.5) +
+  geom_point(size = 3.5) +
+  theme_minimal(base_size = 18) +
+  labs(x = element_blank(),
+    y = 'Life expectancy (in years)',
+    title = 'Life expectancy over time')
+line_chart
+```
+
+## Creating interactive Visualizations - ggiraph(){.scrollable}
+#### [Content for this topic has been sourced from [Albert Rapp's work](https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ We want to make `geom_point()` and `geom_line()` interactive
++ This can be done by 
+  - changing `geom_point()` to `geom_point_interactive()`
+  - changing `geom_line()` to `geom_line_interactive()`
+  - adding the `data_id` aesthetic
+  
+``` {r simple_line_chart_ggiraph_1}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+line_chart <- mean_life_exps %>%
+  ggplot(aes(x = year, y = mean_life_exp, col = continent, data_id = id)) +
+  geom_line_interactive(linewidth = 2.5) +
+  geom_point_interactive(size = 3.5) +
+  theme_minimal(base_size = 18) +
+  labs(x = element_blank(),
+    y = 'Life expectancy (in years)',
+    title = 'Life expectancy over time')
+line_chart
+```
+
+``` {r girafe_object}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+girafe(ggobj = line_chart)
+```
+
+## Creating interactive Visualizations - ggiraph(){.scrollable}
+#### [Content for this topic has been sourced from [Albert Rapp's work](https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Currently, when you click on a line, it appears orange
++ We want to set our interactivity in such a way that when we click on a line, all other lines must fade away
++ This can be done by passing hover options to our interactive chart
+
+```{r simple_line_chart_ggiraph_hover}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+girafe(ggobj = line_chart,
+  options = list(
+    opts_hover(css = ''), ## CSS code of line we're hovering over
+    opts_hover_inv(css = "opacity:0.1;"), ## CSS code of all other lines
+    opts_sizing(rescale = FALSE)),
+  height_svg = 6,
+  width_svg = 9)
+
+```
+
+## Creating interactive Visualizations - ggiraph(){.scrollable}
+#### [Content for this topic has been sourced from [Albert Rapp's work](https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Next, let us try to make an inteactive boxplot using `gapminder_data`
++ We want to make a scatterplot of life expectancy  and population across continents for the year 2007
++ First, we would make the interactive scatterplot
+
+``` {r scatterplotplot_ggiraph1}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+scatterplot_graph <- gapminder_data %>%
+  filter(year == 2007) %>%
+  ggplot(aes(x = life_exp, y = pop, fill = continent, data_id = id)) +
+  geom_point_interactive(aes(col = continent), size = 3) +
+  theme_minimal(base_size = 18) +
+  labs(y = 'Population',
+    title = 'Life expectancy vs Population in 2007')
+
+scatterplot_graph
+```
+
++ Next, to make all other continents' points fade away when we click on one continent points, we use hover options 
+
+``` {r scatterplotplot_ggiraph2}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+girafe(ggobj = scatterplot_graph,
+  options = list(opts_hover(css = ''),
+    opts_hover_inv(css = "opacity:0.1;"),
+    opts_sizing(rescale = FALSE)),
+  height_svg = 6,
+  width_svg = 9)
+```
+
+## Combining `ggiraph` and `patchwork` Together{.scrollable}
+#### [Content for this topic has been sourced from [Albert Rapp's work](https://albert-rapp.de/posts/ggplot2-tips/17_ggiraph/17_ggiraph.html). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ You can combine two interactive charts using patchwork to show the interaction of different variables at the same time
++ However, this can only be done when the underlying `data_id` is the same
+
+```{r ggiraph_patchwork}
+#| eval: true
+#| echo: true
+
+girafe(
+  ggobj = scatterplot_graph + plot_spacer() + line_chart + plot_layout(widths = c(0.45, 0.1, 0.45)),
+  options = list(opts_hover(css = ''),
+    opts_hover_inv(css = "opacity:0.1;"), 
+    opts_sizing(rescale = FALSE)),
+  height_svg = 8,
+  width_svg = 12)
+```
+
