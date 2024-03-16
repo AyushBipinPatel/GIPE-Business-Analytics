@@ -40,6 +40,7 @@ library(ISLR2)
 library(openintro)
 library(janitor)
 library(gapminder)
+library(palmerpenguins)
 ```
 
 <br> <br>
@@ -695,7 +696,7 @@ mean_life_exps <- gapminder_data %>%
 #| output-location: column
 
 line_chart <- mean_life_exps %>%
-  ggplot(aes(x = year, y = mean_life_exp, col = continent)) +
+  ggplot(aes(x = year, y = mean_life_exp, colour = continent)) +
   geom_line(linewidth = 2.5) +
   geom_point(size = 3.5) +
   theme_minimal(base_size = 18) +
@@ -720,7 +721,7 @@ line_chart
 #| output-location: column
 
 line_chart <- mean_life_exps %>%
-  ggplot(aes(x = year, y = mean_life_exp, col = continent, data_id = id)) +
+  ggplot(aes(x = year, y = mean_life_exp, colour = continent, data_id = id)) +
   geom_line_interactive(linewidth = 2.5) +
   geom_point_interactive(size = 3.5) +
   theme_minimal(base_size = 18) +
@@ -816,4 +817,10 @@ girafe(
   height_svg = 8,
   width_svg = 12)
 ```
+
+## Do it Yourself - 6{.scrollable}
+
++ Use `penguins` data from `palmerpenguins` package. Make an interactive scatterplot of `bill_length_mm` and `body_mass_g`, using `species` for the colour
++ Next, calculate the number of species for each year. Make an interactive line chart for the same
++ Combine both the interactive charts
 
