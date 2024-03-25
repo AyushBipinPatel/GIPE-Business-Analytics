@@ -1,0 +1,222 @@
+---
+title: "Business Analytics"
+subtitle: "Presenting Data Visualizations Effectively"
+author: "Ayush Patel and Jayati sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite {.scrollable}
+
+::: incremental
+You already...
+
+-   Know data wrangling in R
+-   Know data visualization in R
+-   Understand different types of objects in R
+:::
+
+## Before we begin
+
+Please install and load the following packages
+
+```{r load}
+#| echo: true
+
+library(tidyverse)
+library(openintro)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About Me
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Why is good visualization so important? {.scrollable}
+
++ Every visualization has a story to tell, which requires skill
++ It is important that the reader presents data effectively, to prompt correct action or discussion 
++ Data visualization is not a tool, it is a means for communicating results
++ To understand good visualization, let us take a look at 
+
+## Say no to 3D graphs! {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+-   3D graphs makes the visualizations redundant and complex for no reason
+-   The bars at the front hide the ones at the back.
+-   Other than looking flashy, they almost never serve the purpose of conveying information
+-   The tilt makes it even more difficult to read the values
+:::
+
+::: {.column width="50%"}
+![Source: [Old Street Solutions](https://www.oldstreetsolutions.com/good-and-bad-data-visualization)](https://www.oldstreetsolutions.com/wp-content/uploads/2021/05/3D-Chart.png)
+:::
+:::
+
+## The more, the merrier? {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+-   This graphic tries to show MLA salaries
+-   The information overload makes it look aesthetically unpleasant
+-   With all the information, it looks difficult to understand
+-   Provided with such a visual, the audience would not be able to understand anything of substance
+:::
+
+::: {.column width="50%"}
+![Source: [jotform](https://www.jotform.com/blog/bad-data-visualization/)](https://www.jotform.com/blog/wp-content/uploads/2021/02/image-51.png){width="1918"}
+:::
+:::
+
+## Misleading Visualization {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+-   Massive growth in iPhone sales, isn’t it?
+-   However, a closer look shows that the sales are cumulative over time
+-   Cumulative sales don’t necessarily show growth
+-   Moreover, the graph does not have a scale on the y-axis
+-   It isn’t clear what the graph is trying to show
+:::
+
+::: {.column width="50%"}
+![Source: [syntaxtechs](https://www.syntaxtechs.com/blog/data-visualization-examples#:~:text=Examples%20of%20Bad%20Data%20Visualization:%20Mistakes%20to%20Avoid,-After%20we%20have&text=Avoid%20using%20colors%20with%20negligible,people%20who%20might%20be%20colorblind)](https://assets-global.website-files.com/60078f9b9c5ea6f60974b74b/61bdf4dfb54a53fa47b4eba6_Blog%2049.11..png)
+:::
+:::
+
+## Avoid Pie Charts {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+-   Pie chart, in most cases, are not the best approach to visualize data.
+-   Not only do they add up to 100% in this case, they also make it difficult to comprehend which component has the biggest share
+-   When you choose a donut chart, you are essentially asking your audience to measure the arc length to see which has the biggest share
+-   Redundant, no? A simple bar chart would have done the job
+:::
+
+::: {.column width="50%"}
+![Source: [jotform](https://www.jotform.com/blog/bad-data-visualization/)](https://www.jotform.com/blog/wp-content/uploads/2021/02/image-48.png)
+:::
+:::
+
+## Always a zero baseline {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+-   There seems to be a major difference between democrats and republicans for percent of people who agreed with court
+-   However, at a closer look, the visualization has been made with a baseline of 50% which means that the difference is only around 8%
+-   Graphs must always be made with a zero baseline to not exaggerate the scale
+:::
+
+::: {.column width="50%"}
+![Source: [syntaxtechs](https://www.syntaxtechs.com/blog/data-visualization-examples#:~:text=Examples%20of%20Bad%20Data%20Visualization:%20Mistakes%20to%20Avoid,-After%20we%20have&text=Avoid%20using%20colors%20with%20negligible,people%20who%20might%20be%20colorblind)](https://assets-global.website-files.com/60078f9b9c5ea6f60974b74b/61bdf500194ffa8799a8400c_Blog%2049.13..jpg)
+:::
+:::
+
+## Making a good graph{.scrollable}
+#### [Content for this topic has been sourced from [Cole Nussbaumer Knaflic's Storytelling with Data: A Data Visualization Guide for Business Professionals'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+<br>
+
+#### Understand the context
+
++ Your visualization should not just present data 
++ It should ask for an action and convey a point
++ For this, you need to know exactly what piece of information you want to convey
++ Your visualizations becomes a means for this communication
+
+## Making a good graph{.scrollable}
+#### [Content for this topic has been sourced from [Cole Nussbaumer Knaflic's Storytelling with Data: A Data Visualization Guide for Business Professionals'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+<br>
+
+#### Choosing the right visual
+
++ Text isn't always bad!
++ Line graph for trends over time
++ Bar graph for categories
++ Scatterplot - relationship between two variables
++ Pie charts - what do you think?
+
+## Making a good graph{.scrollable}
+#### [Content for this topic has been sourced from [Cole Nussbaumer Knaflic's Storytelling with Data: A Data Visualization Guide for Business Professionals'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+<br>
+
+::: columns
+::: {.column width="50%"}
+#### Avoid clutter
+
++ Understand and reduce load while making visualizations
++ Only focus on what you want to convey
+:::
+
+::: {.column width="50%"}
+![Source : [Storytelling with Data Blogs](https://www.storytellingwithdata.com/makeovers)](https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1604610820228-5SLCE89ELW6PBZ8XNEWP/line+graph+and+bar+chart+example.png?format=1500w)
+:::
+:::
+
+## Making a good graph{.scrollable}
+#### [Content for this topic has been sourced from [Cole Nussbaumer Knaflic's Storytelling with Data: A Data Visualization Guide for Business Professionals'](https://r4ds.hadley.nz/). Please check out his work for detailed information.]{style="font-size:15px"}
+
+<br>
+
+#### Focus your audience's attention
+
++ Need for visual cues
++ Colour is an important tool for that
+
+::: columns
+::: {.column width="50%"}
+
+Before 
+
+![Source : [Storytelling with Data Blogs](https://www.storytellingwithdata.com/makeovers)](https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1528204457663-5PF7KKP6HX8ZHPO83G9M/original+treemap.png?format=2500w)
+:::
+
+::: {.column width="50%"}
+
+After 
+
+![Source : [Storytelling with Data Blogs](https://www.storytellingwithdata.com/makeovers)](https://images.squarespace-cdn.com/content/v1/55b6a6dce4b089e11621d3ed/1528204706043-0GDPXYT10AV3XMKMG3ZC/final+solution.PNG?format=2500w)
+
+:::
+:::
+
+## Let's recreate some graphs!{.scrollable}
+
+<img src="RBI_CCS.jpeg" width="80%" height="600"/>
+
+Source : [Twitter](https://twitter.com/Roshanjnu/status/1752595224529133964?t=BkjfHgXYPZV6g0OC8e5VdQ&s=08)
+
