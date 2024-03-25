@@ -31,7 +31,7 @@ Please install and load the following packages
 #| echo: true
 
 library(tidyverse)
-library(openintro)
+library(readxl)
 ```
 
 <br> <br>
@@ -214,9 +214,52 @@ After
 :::
 :::
 
-## Let's recreate some graphs!{.scrollable}
+## Let's replicate some graphs!{.scrollable}
 
-<img src="RBI_CCS.jpeg" width="80%" height="600"/>
++ Download the [data](Consumer Confidence Survey _ Unit Level Data.xlsx)
++ Run the code with your own file path to import the data in R
+
+```{r import_data}
+#| eval: false
+#| echo: true
+
+rbi_ccs_data <- read_xlsx(
+                          "/Users/jayatisharma/Documents/GitHub/GIPE-Business-Analytics/Consumer Confidence Survey _ Unit Level Data.xlsx"
+                          )
+```
+
+## Let's replicate some graphs!{.scrollable}
+
++ Try replicating this graph with the data
+
+<img src="RBI_CCS.jpeg" width="60%" height="600"/>
 
 Source : [Twitter](https://twitter.com/Roshanjnu/status/1752595224529133964?t=BkjfHgXYPZV6g0OC8e5VdQ&s=08)
+
+
+```{r replication}
+#| eval: false
+#| echo: true
+
+rbi_ccs_data <- rbi_ccs_data |>
+  select(`Average Monthly Income`, `Perception on General Economic condition - compared to one year ago`) |>
+  filter(`Perception on General Economic condition - compared to one year ago` != "Remained The Same")
+
+rbi_ccs_percent <- rbi_ccs_data %>%
+  group_by(`Average Monthly Income`, `Perception on General Economic condition - compared to one year ago`) %>%
+  summarise(Count = n()) %>%
+  mutate(Total = sum(Count), Percentage = Count / Total * 100)
+```
+
+``` {r rep_graph}
+#| eval: false
+#| echo: true
+
+ggplot(rbi_ccs_percent, aes(x = `Average Monthly Income`, y = Percentage, fill = `Perception on General Economic condition - compared to one year ago`)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  labs(x = "Income Group", y = "Percentage", fill = "Perception") +
+  scale_fill_brewer(palette = "Pastel1") +
+  coord_flip()
+```
 
