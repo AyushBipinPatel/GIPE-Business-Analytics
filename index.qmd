@@ -60,6 +60,7 @@ You will find all lecture slides populated here.
   + [Lecture 7: Advanced Data Wrangling](Lecture7_AdvancedDataWrangling.html)
   + [Lecture 8 : Functions](Lecture8_Functions.html)
   + [Lecture 9 : Advanced Data Visualisation](Lecture9_AdvancedDataVisualizations.html)
+  + [Lecture 10: Presenting Data Visualizations](Lecture10_PresentingDataVisualizations.html)
   
 # References
 
