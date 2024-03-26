@@ -237,29 +237,93 @@ rbi_ccs_data <- read_xlsx(
 Source : [Twitter](https://twitter.com/Roshanjnu/status/1752595224529133964?t=BkjfHgXYPZV6g0OC8e5VdQ&s=08)
 
 
-```{r replication}
+```{r replication, include=FALSE}
 #| eval: false
 #| echo: true
 
 rbi_ccs_data <- rbi_ccs_data |>
-  select(`Average Monthly Income`, `Perception on General Economic condition - compared to one year ago`) |>
-  filter(`Perception on General Economic condition - compared to one year ago` != "Remained The Same")
+  select(`Average Monthly Income`, `Perception on General Economic condition - compared to one year ago`)
 
-rbi_ccs_percent <- rbi_ccs_data %>%
-  group_by(`Average Monthly Income`, `Perception on General Economic condition - compared to one year ago`) %>%
-  summarise(Count = n()) %>%
-  mutate(Total = sum(Count), Percentage = Count / Total * 100)
+rbi_ccs_percent <- rbi_ccs_data |>
+  group_by(`Average Monthly Income`, `Perception on General Economic condition - compared to one year ago`) |>
+  summarise(Count = n()) |>
+  ungroup() |>
+  group_by(`Average Monthly Income`) |>
+  mutate(Total = sum(Count), Percentage = Count / Total * 100) |>
+  filter(`Perception on General Economic condition - compared to one year ago` != "Remained The Same")
 ```
 
-``` {r rep_graph}
+``` {r rep_graph, include=FALSE}
 #| eval: false
 #| echo: true
 
+rbi_ccs_percent$`Average Monthly Income` <- factor(rbi_ccs_percent$`Average Monthly Income`, levels = c("Rs. 1 lakh and above", "Rs. 50 thousand to less then Rs. 1 lakh", "Rs. 25 thousand to less then Rs. 50 thousand", "Rs. 10 thousand to less then Rs. 25 thousand", "Rs. 5 thousand to less then Rs. 10 thousand", "Less then Rs. 5 thousand"))
+
 ggplot(rbi_ccs_percent, aes(x = `Average Monthly Income`, y = Percentage, fill = `Perception on General Economic condition - compared to one year ago`)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = "dodge", width = 0.7) +
+  geom_text(aes(label = paste0(round(Percentage, 1), "%"), y = 0.5), 
+            position = position_dodge(width = 0.9),    # Adjust position to match bars
+            hjust = 0, size = 4, colour = "white") + 
   theme_minimal() +
-  labs(x = "Income Group", y = "Percentage", fill = "Perception") +
-  scale_fill_brewer(palette = "Pastel1") +
+  labs(title = "The class-divide in economic sentiment",
+       subtitle = "Share of respondents in each income group in RBI's Consumer Confidence Survey",
+       caption = "Income categories are average monthly income") +
+  scale_fill_manual(values = c("Improved" = "#C30010", "Worsened" = "#03f087"))+
+  labs(x = NULL, y = NULL, fill = NULL) +  
+  theme(legend.title = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(face = "bold"),
+        legend.position = "top",
+        legend.box = "vertical",
+        axis.text.x = element_text(colour = "black"), # Change x-axis label color to black
+        axis.text.y = element_text(colour = "black"))+
   coord_flip()
 ```
 
+
+
+## Let's replicate some graphs!{.scrollable}
+
++ Import [this](MPCE.xlsx) data in R
++ Try recreating this graph
+
+<img src="MPCE_graph.jpg" width="75%" height="600"/>
+
+```{r import_data_g2, include=FALSE}
+#| eval: false
+#| echo: true
+
+MPCE <- read_xlsx("/Users/jayatisharma/Documents/GitHub/GIPE-Business-Analytics/MPCE.xlsx")
+
+MPCE <- MPCE |>
+  slice(1:12)
+
+ggplot(MPCE, aes(x = `Fractile classes of MPCE`)) +
+  geom_segment(aes(xend = `Fractile classes of MPCE`, y = Rural, yend = Urban), color = "#EEEEEE", size = 3.5) +
+  geom_point(aes(y = Rural), color = "#48BBDB", size = 3.5) +
+  geom_point(aes(y = Urban), color = "#50C878", size = 3.5) +
+  scale_y_continuous(labels = scales::comma) +
+  geom_text(aes(y = Rural, label = Rural), 
+                   nudge_y = -390, # Adjust this value as needed to position the labels correctly
+                   color = "#48BBDB", 
+                   size = 3.5)+
+   geom_text(aes(y = Urban, label = Urban), 
+                   nudge_y = 390, # Adjust this value as needed to position the labels correctly
+                   color = "#50C878", 
+                   size = 3.5)+
+  labs(title = "Average MPCE across Fractile Classes in 2022-23 (in Rs.)",
+       caption = "Chart: Jayati Sharma | Source: HCES: 2022-23 Fact Sheet; MOSPI | Created with Datawrapper") +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    plot.caption = element_text(hjust = 0, face="italic"),
+    axis.text.x = element_text(colour = "black"), # Change x-axis label color to black
+        axis.text.y = element_text(colour = "black"))+
+  coord_flip()
+
+```
+
+## Thank You :){.center}
