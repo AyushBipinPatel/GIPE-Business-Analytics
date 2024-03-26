@@ -67,7 +67,7 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 + Every visualization has a story to tell, which requires skill
 + It is important that the reader presents data effectively, to prompt correct action or discussion 
 + Data visualization is not a tool, it is a means for communicating results
-+ To understand good visualization, let us take a look at 
++ To understand good visualization, let us take a look at some examples of different data visualizations
 
 ## Say no to 3D graphs! {.scrollable}
 
@@ -223,9 +223,7 @@ After
 #| eval: false
 #| echo: true
 
-rbi_ccs_data <- read_xlsx(
-                          "/Users/jayatisharma/Documents/GitHub/GIPE-Business-Analytics/Consumer Confidence Survey _ Unit Level Data.xlsx"
-                          )
+rbi_ccs_data <- read_xlsx("/Users/jayatisharma/Documents/Consumer Confidence Survey _ Unit Level Data.xlsx")
 ```
 
 ## Let's replicate some graphs!{.scrollable}
