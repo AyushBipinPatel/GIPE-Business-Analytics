@@ -1,0 +1,216 @@
+---
+title: "Business Analytics"
+subtitle: "Decision Trees"
+author: "Ayush Patel and Jayati Sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite {.scrollable}
+
+::: incremental
+You already....
+
++ Understand linear regression
++ Know data wrangling and data visualization in R
+:::
+
+## Before we begin {.scrollable}
+
+Please install and load the following packages
+
+```{r loading}
+#| echo: true
+
+library(dplyr)
+library(tidyverse)
+library(ISLR2)
+library(tree)
+```
+
+<br> <br>
+
+Access lecture slide from the [course landing page](https://ayushbipinpatel.github.io/GIPE-Business-Analytics/)
+
+## About me {.scrollable}
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Learning Objectives {.scrollable}
+
+::: incremental
+
++ Learn about decision trees
+:::
+
+## What are tree-based methods?{.scrollable}
+
++ Decison trees - utilized for regression and classification problms
++ Decision trees are 
+    - **supervised**
+    - **non-parametric**
++ Named so because of their heirarchial, tree-like structure
+
+## Tradeoff between flexibility and interpretability{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ For the various methods, the tradeoff between interpretability and flexibility
+
+<img src="Tradeoff.jpg" width="75%" height="600"/>
+
+Source : [ISLR : Chapter 2](https://www.statlearning.com)
+
+## Download the Data{.scrollable}
+
++ Download the `Hitters` data from `ISLR2` package
+
+```{r download_data}
+#| eval: true
+#| echo: true
+
+ISLR2::Hitters
+```
+
++ Take a look at the variables in the data
+
+## Decision Trees - Regression{.scrollable}
+
++ Task - You want to predict `Salary` of players from the number of `Years` they played and the number of `Hits` in the previous year
++ Can you write a regression equation for this?
++ Let us take a look at the plot
+
+```{r hitters_plot}
+#| eval: true
+#| echo: true
+#| output-location: column
+
+Hitters |>
+ggplot(aes(x = Years, y = Hits)) +
+  geom_point(aes(colour = Salary))
+```
+
+## Decision Trees - Regression{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ You want to predict `Salary` (annual salary of player )from `Years` (Number of years in leagues) and `Hits` (Number of hits)
++ Look at the decision tree below
+
+<img src="8_1.jpg" width="60%" height="600"/>
+
+Source : [ISLR : Chapter 8](https://www.statlearning.com)
+
+## Decision Trees{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ The first split in the tree is such that all observations where Years < 4.5 are in the left branch
++ The predicted salary for these players is given by the mean response of all observations in this split
++ For these observations, salary is log of 5.107 i.e. $165,174
++ All the observations where Years > 4.5 are on the other side, which are further split based on the number of hits in the previous season
++ Overall, the tree divides the data into 3 regions as - $$R_1 = (X | Years <4.5)  , R_2 =(X | Years>=4.5, Hits<117.5), R3 = (X | Years>=4.5, Hits>=117.5)$$
+
+## Decision Trees - Terminologies{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ As like the tree analogy, the regions $$R_1, R_2, R_3$$ are known as ***terminal nodes***, just like leaves of the tree
++ The points along the tree where the predictor space is split are referred to as ***internal nodes***
++ The lines that connect the tree to the nodes are the ***branches***
+
+## Decision Trees - Regression{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ For better understanding, let us also look at a graph which shows how the regions are split
++ Why boxes? Simply because they are easier to interpret
+<img src="8_2.jpg" width="60%" height="600"/>
+
+Source : [ISLR : Chapter 8](https://www.statlearning.com)
+
+## The process of building a decision trees{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+:::incremental
++ Simply put, two steps:
++ You have N (n1, n2, n3, n4 ....) predictors in the space into non-overlapping regions (R1, R2, R3.....Rj)
++ For each observation that we make for a region R1 , we assume that all the observations lying in that region have the same prediction, which is given by the mean of the all the values in that region
+:::
+
+## Decision Trees - Recursive Binary Splitting{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ The goal is to find boxes R1, . . . , Rj that **minimize the RSS**, given by
+
+$$\sum_{j=1}^J \sum_{i \in Rj}{(y_i - \hat y_{Rj})}^2$$
+where $$\hat y_{Rj}$$ is the mean response for the training observations within the jth box
+
+## Decision Trees - Recursive Binary Splitting{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Since it is not computationally feasible to calculate this for each possible predictor, we use the **top down, greedy** approach
++ Also called the **recursive binary splitting** method
++ Named so because it begins at the start of the tree - at a point where all the observations belong to a single region
++ It then successively splits the predictor space such that each split is indicated via two new branches further down on the tree
++ Also named **greedy approach** because at each step, the best split is made at that particular step, rather than looking ahead and picking a split that will lead to a better tree in some future step
+
+## Decision Trees - Tree Pruning{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ The previous approach would overfit the data
++ An alternative approach is **tree pruning**
++ Grow a very large tree and then prune it in order to obtain a subtree
++ How can we decide the way to prune a tree?
++ This becomes a problem since there are infinite options to do so, given the large number of subtrees
++ **Cost complexity pruning** , also known as **weakest link pruning** provides a way
++ Rather than considering every possible subtree, we consider a sequence of trees indexed by a nonnegative tuning parameter α
+
+## Decision Trees - Tree Pruning{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+$$\sum_{m=1}^{|T|} \sum_{x \in Rm}{(y_i - \hat y_{Rm})}^2 + \alpha * |T|$$
+
++ Number of terminal nodes of the tree T is denoted by |T|
++ Rm is the rectangle corresponding to the mth terminal node
++ $$\hat y_{Rm}$$ is the predicted response associated with Rm (mean of the training observations in Rm)
++ The tuning parameter α controls a trade-off between the subtree’s complexity and its fit to the training data
++ As α increases, there is a price to pay for having a tree with many terminal nodes, and so there would be a smaller subtree
+
+## Decision Trees - Hitters Data{.scrollable}
+
++ Making the decision tree
+
+```{r decision_tree}
+#| eval: true
+#| echo: true
+
+hitters_tree <- tree(Salary ~ . , Hitters)
+
+plot(hitters_tree)
+text(hitters_tree, pretty = 0)
+```
+
+## Thank You :){.center}
