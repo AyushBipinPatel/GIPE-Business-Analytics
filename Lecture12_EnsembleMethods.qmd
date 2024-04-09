@@ -114,6 +114,7 @@ Hold up..
 ## Boosting - What?{.scrollable}
 #### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
 
++ The second method of boosting is similar to bagging yet takes a slightly different approach 
 + Bagging involves creating many models from the training data, each tree being independent of the other
 + Boosting involves something similar; except here the trees are grown sequentially
 + A new tree is made using information from the previous tree, and improves it
@@ -138,3 +139,39 @@ Boosting has three tuning parameters
   - Can you imagine what an extremely low or high value would imply for the number of decision trees?
 + `d` - the number of splits in each tree, which controls the complexity of the boosted model
   - Often d = 1 works well
+
+## Random Forests{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ The third method of Random forest also includes improving accuracy of the bagging approach
++ Random forests are an improvement on the bagging approach
++ How? It decorrelates the trees in the bagging method
++ In addition to creating bootstrapped samples, it also randomly selects a subset of features based at the split of the trees
++ That is, each time a split is considered, a random sample of `m` predictors are chosen from the total of `p` predictors
++ A new sample of the `m` predictors is taken at each split
++ The number of predictors i.e value of is selected as $ m \approx \sqrt p$
++ Is this is so, can you find what could be one possible value of m in a dataset that has 33 predictors?
+
+## Random Forests{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+::: incremental
++ Hence, while building a random forest, not all predictors are chosen together
++ Suppose a dataset has one extremely strong predictor and other moderately strong predictors
++ Under the bagging approach, this strong predictor would be the top split in majority of the trees
++ This makes the trees similar, and ***correlates*** the predictions
++ Also does not reduce the variance
+:::
+
+## Random Forests{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+::: incremental
++ In such a case, random forests only considering a subset of predictors solves the problem
++ This decorrelates the trees
++ Makes the average of the predictions with less variance and more reliability
++ By seeing the only difference between bagging and random forests approach, at what point would the random forest built be equal to the one built by bagging?
++ At m = p
+:::
+
+## Thank You :){.center}
