@@ -1,0 +1,76 @@
+---
+title: "Business Analytics"
+subtitle: "Ensemble Methods"
+author: "Ayush Patel and Jayati Sharma"
+date: today
+date-format: " DD MMMM, YYYY"
+embed-resources: true
+format: 
+  revealjs:
+    embed-resources: true
+    slide-number: c/t
+    width: 1400
+    theme: [serif, theme.scss]
+---
+
+## Pre-requisite {.scrollable}
+
+::: incremental
+You already....
+
++ Understand linear regression
++ Learnt about decision trees
+:::
+
+## About me {.scrollable}
+
+::: columns
+::: {.column width="70%"}
+I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
+
+[I am a researcher working at the intersection of data, law, development and economics.]{.fragment fragment-index="2" style="font-size:25px"}
+
+[I teach Data Science using R at Gokhale Institute of Politics and Economics]{.fragment fragment-index="3" style="font-size:25px"}
+
+[I am a [RStudio (Posit) certified tidyverse Instructor.](https://education.rstudio.com/trainers/people/patel+ayush/)]{.fragment fragment-index="4" style="font-size:25px"}
+
+[I am a Researcher at [Oxford Poverty and Human development Initiative (OPHI)](https://ophi.org.uk/), at the University of Oxford.]{.fragment fragment-index="5" style="font-size:25px"}
+:::
+
+::: {.column width="30%"}
+**Reach me**
+
+{{< fa solid envelope >}} [ayush.ap58\@gmail.com]{style="font-size:25px"}
+
+{{< fa solid envelope >}} [ayush.patel\@gipe.ac.in]{style="font-size:25px"}
+:::
+:::
+
+## Learning Objectives {.scrollable}
+
+::: incremental
+
++ Learn about ensemble methods
+  - Bagging
+  - Boosting
+  - Random Forests
+  
+:::
+
+## Ensemble Methods - Why?{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ In the previous lecture, you learnt about decision trees
++ Decision trees can be non-robust and not highly accurate
++ Hence, you can aggregate many decision trees
++ These methods are bagging, boosting and random forests
+
+## Ensemble Methods - What?{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ An ensemble method combines many simple “building block” models in order to obtain a single and potentially very powerful model
++ In simple words, instead of using a single model, this approach improves the accuracyin results by combining many models
++ The "simple building block" models are also known as weak learners, since on their own, they may lead to mediocre predictions with less accuracy
+
+## Bagging{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
