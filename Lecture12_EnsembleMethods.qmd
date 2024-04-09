@@ -155,11 +155,13 @@ Boosting has three tuning parameters
 ## Random Forests{.scrollable}
 #### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
 
+::: incremental
 + Hence, while building a random forest, not all predictors are chosen together
 + Suppose a dataset has one extremely strong predictor and other moderately strong predictors
 + Under the bagging approach, this strong predictor would be the top split in majority of the trees
 + This makes the trees similar, and ***correlates*** the predictions
 + Also does not reduce the variance
+:::
 
 ## Random Forests{.scrollable}
 #### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
