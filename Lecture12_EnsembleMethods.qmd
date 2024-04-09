@@ -74,3 +74,42 @@ I am [Ayush]{.fragment fragment-index="1" style="font-size:45px"}.
 
 ## Bagging{.scrollable}
 #### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+::: incremental
++ Decision trees have ***high variance***
++ Why? Because when you split your data into **training** and **testing** data to fit a decision tree, the results would have high contrast
++ Hence, a model with low variance would will give similar results when applied to distinct data
++ ***Bootstrap aggregation*** or ***bagging*** is an approach to reduce this variance
+:::
+
+## Bagging{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+
++ Bagging involves taking many training sets, building a model using each and then taking an average of the predictions
++ Why? Because **averaging a set of observations reduces variance**
++ So, essentially bagging builds many such models and averages their results to reduce the variance that comes from a single model
++ The average of predictions by separate training models $f^1 (x)$, $f^2 (x)$, ...... $f^B (x)$ is given by
+
+$$\hat f_{avg} (x) = 1/B sum_{b=1}^B \hat f^b (x)$$
+
+## Bagging{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+Hold up..
+
++ We won't always have so many datasets
++ So how would we able to generate so many training sets?
++ Simply put, we take repeated samples from the single training set
++ 'B' regression trees are constructed using 'B' bootstrapped training sets, and we take an average of the resulting predictions
+
+## Bagging{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ This way, each individual tree has a high variance
++ But averaging reduces the variance
++ Recall the bias between flexibility and interpretability?
++ While bagging improves accuracy, it becomes more complex to interpret than decision trees
+
+## Boosting{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}

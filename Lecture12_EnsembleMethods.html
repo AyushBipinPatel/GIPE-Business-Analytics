@@ -1216,6 +1216,40 @@ Ayush Patel and Jayati Sharma
 <section id="bagging" class="slide level2 scrollable">
 <h2>Bagging</h2>
 <h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-2"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<div>
+<ul>
+<li class="fragment">Decision trees have <strong><em>high variance</em></strong></li>
+<li class="fragment">Why? Because when you split your data into <strong>training</strong> and <strong>testing</strong> data to fit a decision tree, the results would have high contrast</li>
+<li class="fragment">Hence, a model with low variance would will give similar results when applied to distinct data</li>
+<li class="fragment"><strong><em>Bootstrap aggregation</em></strong> or <strong><em>bagging</em></strong> is an approach to reduce this variance</li>
+</ul>
+</div>
+</section>
+<section id="bagging-1" class="slide level2 scrollable">
+<h2>Bagging</h2>
+<h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-3"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<ul>
+<li>Bagging involves taking many training sets, building a model using each and then taking an average of the predictions</li>
+<li>Why? Because <strong>averaging a set of observations reduces variance</strong></li>
+<li>So, essentially bagging builds many such models and averages their results to reduce the variance that comes from a single model</li>
+<li>The average of predictions by separate training models <span class="math inline">\(f^1 (x)\)</span>, <span class="math inline">\(f^2 (x)\)</span>, …… <span class="math inline">\(f^B (x)\)</span> is given by</li>
+</ul>
+<p><span class="math display">\[\hat f_{avg} (x) = 1/B sum_{b=1}^B \hat f^b (x)\]</span></p>
+</section>
+<section id="bagging-2" class="slide level2 scrollable">
+<h2>Bagging</h2>
+<h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-4"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<p>Hold up..</p>
+<ul>
+<li>We won’t always have so many datasets</li>
+<li>So how would we able to generate so many training sets?</li>
+<li>Simply put, we take repeated samples from the single training set</li>
+<li>‘B’ regression trees are constructed using ‘B’ bootstrapped training sets, and we take an average of the resulting predictions</li>
+<li>This way, each individual tree has a high variance</li>
+<li>But averaging reduces the variance</li>
+<li>Recall the bias between flexibility and interpretability?</li>
+<li>While bagging improves accuracy, it becomes more complex to interpret than decision trees</li>
+</ul>
 <div class="footer footer-default">
 
 </div>
