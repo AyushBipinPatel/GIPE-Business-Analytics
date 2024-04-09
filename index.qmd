@@ -62,7 +62,6 @@ You will find all lecture slides populated here.
   + [Lecture 9 : Advanced Data Visualisation](Lecture9_AdvancedDataVisualizations.html)
   + [Lecture 10: Presenting Data Visualizations](Lecture10_PresentingDataVisualizations.html)
   + [Lecture 11: Decision Trees](Lecture11_DecisionTrees.html)
-  + [Lecture 12: Ensemble Methods](Lecture12_EnsembleMethods.html)
   
 # References
 
