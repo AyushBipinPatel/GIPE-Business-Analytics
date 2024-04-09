@@ -111,5 +111,30 @@ Hold up..
 + Recall the bias between flexibility and interpretability?
 + While bagging improves accuracy, it becomes more complex to interpret than decision trees
 
+## Boosting - What?{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Bagging involves creating many models from the training data, each tree being independent of the other
++ Boosting involves something similar; except here the trees are grown sequentially
++ A new tree is made using information from the previous tree, and improves it
+
 ## Boosting{.scrollable}
 #### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
++ Here also, there are many decision trees $f^1 (x)$, $f^2 (x)$, ...... $f^B (x)$
++ However, instead of making a large decision tree which overfits, here the model learns step-by-step
++ A tree is built, and then a decision tree is fit based on the residuals (misclassified)
++ This new tree is added which updates the residuals
++ This way, by fitiing small trees to the residuals, $\hat f$ is imporved upon wherever it does not perform well
+
+## Boosting{.scrollable}
+#### [Content for this topic has been sourced from [An Introduction to Statistical Learning](https://www.statlearning.com). Please check out the work for detailed information.]{style="font-size:15px"}
+
+Boosting has three tuning parameters
+
++ The number of trees - if B is too large, it can also overfit
++  Parameter $\lambda$ - This is the shrinkage parameter which controls the rate at which boosting learns
+  - a small positve number
+  - Can you imagine what an extremely low or high value would imply for the number of decision trees?
++ `d` - the number of splits in each tree, which controls the complexity of the boosted model
+  - Often d = 1 works well

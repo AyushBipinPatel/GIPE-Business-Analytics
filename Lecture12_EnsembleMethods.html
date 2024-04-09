@@ -1245,10 +1245,51 @@ Ayush Patel and Jayati Sharma
 <li>So how would we able to generate so many training sets?</li>
 <li>Simply put, we take repeated samples from the single training set</li>
 <li>‘B’ regression trees are constructed using ‘B’ bootstrapped training sets, and we take an average of the resulting predictions</li>
+</ul>
+</section>
+<section id="bagging-3" class="slide level2 scrollable">
+<h2>Bagging</h2>
+<h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-5"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<ul>
 <li>This way, each individual tree has a high variance</li>
 <li>But averaging reduces the variance</li>
 <li>Recall the bias between flexibility and interpretability?</li>
 <li>While bagging improves accuracy, it becomes more complex to interpret than decision trees</li>
+</ul>
+</section>
+<section id="boosting---what" class="slide level2 scrollable">
+<h2>Boosting - What?</h2>
+<h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-6"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<ul>
+<li>Bagging involves creating many models from the training data, each tree being independent of the other</li>
+<li>Boosting involves something similar; except here the trees are grown sequentially</li>
+<li>A new tree is made using information from the previous tree, and improves it</li>
+</ul>
+</section>
+<section id="boosting" class="slide level2 scrollable">
+<h2>Boosting</h2>
+<h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-7"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<ul>
+<li>Here also, there are many decision trees <span class="math inline">\(f^1 (x)\)</span>, <span class="math inline">\(f^2 (x)\)</span>, …… <span class="math inline">\(f^B (x)\)</span></li>
+<li>However, instead of making a large decision tree which overfits, here the model learns step-by-step</li>
+<li>A tree is built, and then a decision tree is fit based on the residuals (misclassified)</li>
+<li>This new tree is added which updates the residuals</li>
+<li>This way, by fitiing small trees to the residuals, <span class="math inline">\(\hat f\)</span> is imporved upon wherever it does not perform well</li>
+</ul>
+</section>
+<section id="boosting-1" class="slide level2 scrollable">
+<h2>Boosting</h2>
+<h4 id="content-for-this-topic-has-been-sourced-from-an-introduction-to-statistical-learning.-please-check-out-the-work-for-detailed-information.-8"><span style="font-size:15px">Content for this topic has been sourced from <a href="https://www.statlearning.com">An Introduction to Statistical Learning</a>. Please check out the work for detailed information.</span></h4>
+<p>Boosting has three tuning parameters</p>
+<ul>
+<li>The number of trees - if B is too large, it can also overfit</li>
+<li>Parameter <span class="math inline">\(\lambda\)</span> - This is the shrinkage parameter which controls the rate at which boosting learns</li>
+<li>a small positve number</li>
+<li>Can you imagine what an extremely low or high value would imply for the number of decision trees?</li>
+<li><code>d</code> - the number of splits in each tree, which controls the complexity of the boosted model
+<ul>
+<li>Often d = 1 works well</li>
+</ul></li>
 </ul>
 <div class="footer footer-default">
 
